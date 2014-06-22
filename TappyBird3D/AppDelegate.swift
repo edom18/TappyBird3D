@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  TappyBird3D
-//
-//  Created by 比留間 和也 on 2014/06/22.
-//  Copyright (c) 2014年 比留間 和也. All rights reserved.
-//
 
 import UIKit
 
@@ -40,7 +33,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
 }
 

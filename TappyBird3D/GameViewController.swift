@@ -1,10 +1,3 @@
-//
-//  GameViewController.swift
-//  TappyBird3D
-//
-//  Created by 比留間 和也 on 2014/06/22.
-//  Copyright (c) 2014年 比留間 和也. All rights reserved.
-//
 
 import UIKit
 import QuartzCore
@@ -42,8 +35,13 @@ class GameViewController: UIViewController {
         
         // create and add a 3d box to the scene
         let boxNode = SCNNode()
-        boxNode.geometry = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0.02)
+        let boxGeo  = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0.02)
+        boxNode.geometry = boxGeo
+        boxNode.position = SCNVector3(x:0, y:-1, z:0)
         scene.rootNode.addChildNode(boxNode)
+        
+        let boxShape = SCNPhysicsShape(geometry: boxGeo, options: nil)
+        boxNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: boxShape)
         
         // create and configure a material
         let material = SCNMaterial()
@@ -54,12 +52,14 @@ class GameViewController: UIViewController {
         // set the material to the 3d object geometry
         boxNode.geometry.firstMaterial = material
         
-        // animate the 3d object
-        let animation: CABasicAnimation = CABasicAnimation(keyPath: "rotation")
-        animation.toValue = NSValue(SCNVector4: SCNVector4(x: 1, y: 1, z: 0, w: Float(M_PI)*2))
-        animation.duration = 5
-        animation.repeatCount = MAXFLOAT //repeat forever
-        boxNode.addAnimation(animation, forKey: nil)
+        let smallBoxNode = SCNNode()
+        let smallBoxGeo  = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0.02)
+        smallBoxNode.geometry = smallBoxGeo
+        smallBoxNode.position = SCNVector3(x: 0, y: 1, z: 0)
+        scene.rootNode.addChildNode(smallBoxNode)
+
+        let smallBoxShape = SCNPhysicsShape(geometry: smallBoxGeo, options: nil)
+        smallBoxNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: smallBoxShape)
         
         // retrieve the SCNView
         let scnView = self.view as SCNView
@@ -136,5 +136,4 @@ class GameViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
     }
-
 }
