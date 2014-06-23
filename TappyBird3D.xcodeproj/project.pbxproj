@@ -12,6 +12,7 @@
 		5C993C4F195653980093F73B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C993C4D195653980093F73B /* Main.storyboard */; };
 		5C993C51195653980093F73B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C993C50195653980093F73B /* Images.xcassets */; };
 		5C993C5D195653990093F73B /* TappyBird3DTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C993C5C195653990093F73B /* TappyBird3DTests.swift */; };
+		5CB9CBDB195736A100E468C9 /* PhysWorldBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +35,9 @@
 		5C993C56195653990093F73B /* TappyBird3DTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TappyBird3DTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C993C5B195653990093F73B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C993C5C195653990093F73B /* TappyBird3DTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappyBird3DTests.swift; sourceTree = "<group>"; };
+		5CB9CBD81957360F00E468C9 /* PhysWorldBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysWorldBridge.h; sourceTree = "<group>"; };
+		5CB9CBD9195736A000E468C9 /* TappyBird3D-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TappyBird3D-Bridging-Header.h"; sourceTree = "<group>"; };
+		5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysWorldBridge.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +84,9 @@
 				5C993C4D195653980093F73B /* Main.storyboard */,
 				5C993C50195653980093F73B /* Images.xcassets */,
 				5C993C47195653980093F73B /* Supporting Files */,
+				5CB9CBD81957360F00E468C9 /* PhysWorldBridge.h */,
+				5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */,
+				5CB9CBD9195736A000E468C9 /* TappyBird3D-Bridging-Header.h */,
 			);
 			path = TappyBird3D;
 			sourceTree = "<group>";
@@ -208,6 +215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CB9CBDB195736A100E468C9 /* PhysWorldBridge.m in Sources */,
 				5C993C4C195653980093F73B /* GameViewController.swift in Sources */,
 				5C993C4A195653980093F73B /* AppDelegate.swift in Sources */,
 			);
@@ -325,9 +333,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = TappyBird3D/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TappyBird3D/TappyBird3D-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -336,9 +347,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = TappyBird3D/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TappyBird3D/TappyBird3D-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -397,6 +410,7 @@
 				5C993C62195653990093F73B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5C993C63195653990093F73B /* Build configuration list for PBXNativeTarget "TappyBird3DTests" */ = {
 			isa = XCConfigurationList;
@@ -405,6 +419,7 @@
 				5C993C65195653990093F73B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
