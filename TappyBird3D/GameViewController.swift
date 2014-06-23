@@ -25,6 +25,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         playerBird.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: playerBirdShape)
     }
     
+    /**
+     *  Set up field.
+     */
     func setupField() {
         // create and add a 3d box to the scene
         boxNode = SCNNode()
@@ -52,15 +55,15 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     func setupEnv() {
         // create and add a light to the scene
         let lightNode = SCNNode()
+        lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
         lightNode.light = SCNLight()
         lightNode.light.type = SCNLightTypeOmni
-        lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
         scene.rootNode.addChildNode(lightNode)
         
         // create and add an ambient light to the scene
         let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
-        ambientLightNode.light.type = SCNLightTypeAmbient
+        ambientLightNode.light.type  = SCNLightTypeAmbient
         ambientLightNode.light.color = UIColor.darkGrayColor()
         scene.rootNode.addChildNode(ambientLightNode)
         
@@ -69,17 +72,59 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         bridge.physicsGravity(scene, withGravity: SCNVector3(x: 0, y: -98.0, z: 0))
     }
     
+    
     /**
      *  Start game loop.
      *
      *  Game logic updating is in `update:` method.
      */
     func startGameLoop() {
-        // create a game loop.
         var displayLink: CADisplayLink = CADisplayLink(target: self, selector: "update:")
         displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
     }
+    
+    
+    /**
+     *  Set up to handel tap
+     */
+    func setupHandleTap() {
+        let scnView = self.view as SCNView
+        let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
+        let gestureRecognizers = NSMutableArray()
+        gestureRecognizers.addObject(tapGesture)
+        gestureRecognizers.addObjectsFromArray(scnView.gestureRecognizers)
+        scnView.gestureRecognizers = gestureRecognizers
+    }
+    
+    
+    /**
+     *  Configure a view.
+     */
+    func configureView() {
+        // retrieve the SCNView
+        let scnView = self.view as SCNView
+        
+        // set the scene to the view
+        scnView.scene = scene
+        
+        // allows the user to manipulate the camera
+        scnView.allowsCameraControl = true
+        
+        // show statistics such as fps and timing information
+        scnView.showsStatistics = true
+        
+        // configure the view
+        scnView.backgroundColor = UIColor.blackColor()
+        
+        // add a gameloop as delegate
+        scnView.delegate = self
+    }
+    
 
+    /**
+     *  @override
+     *  viewDidLoad
+     */
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -103,33 +148,11 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         // Set up field.
         setupField()
         
-        //////////////////////////////////////////////////////
-        // Set up the scene.
+        // Configure a view.
+        configureView()
         
-        // retrieve the SCNView
-        let scnView = self.view as SCNView
-        
-        // set the scene to the view
-        scnView.scene = scene
-        
-        // allows the user to manipulate the camera
-        scnView.allowsCameraControl = true
-        
-        // show statistics such as fps and timing information
-        scnView.showsStatistics = true
-        
-        // configure the view
-        scnView.backgroundColor = UIColor.blackColor()
-        
-        // add a gameloop as delegate
-        scnView.delegate = self
-        
-        // add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
-        let gestureRecognizers = NSMutableArray()
-        gestureRecognizers.addObject(tapGesture)
-        gestureRecognizers.addObjectsFromArray(scnView.gestureRecognizers)
-        scnView.gestureRecognizers = gestureRecognizers
+        // Set up handle tap.
+        setupHandleTap()
         
         // Start game loop.
         startGameLoop()
@@ -147,41 +170,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     func handleTap(gestureRecognize: UIGestureRecognizer) {
         playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: 20.5, z: 0), impulse: true)
     }
-//    func handleTap(gestureRecognize: UIGestureRecognizer) {
-//        // retrieve the SCNView
-//        let scnView = self.view as SCNView
-//        
-//        // check what nodes are tapped
-//        let p = gestureRecognize.locationInView(scnView)
-//        let hitResults = scnView.hitTest(p, options: nil)
-//        
-//        // check that we clicked on at least one object
-//        if hitResults.count > 0 {
-//            // retrieved the first clicked object
-//            let result: AnyObject! = hitResults[0]
-//            
-//            // get its material
-//            let material = result.node!.geometry.firstMaterial
-//            
-//            // highlight it
-//            SCNTransaction.begin()
-//            SCNTransaction.setAnimationDuration(0.5)
-//            
-//            // on completion - unhighlight
-//            SCNTransaction.setCompletionBlock {
-//                SCNTransaction.begin()
-//                SCNTransaction.setAnimationDuration(0.5)
-//                
-//                material.emission.contents = UIColor.blackColor()
-//                
-//                SCNTransaction.commit()
-//            }
-//            
-//            material.emission.contents = UIColor.redColor()
-//            
-//            SCNTransaction.commit()
-//        }
-//    }
     
     override func shouldAutorotate() -> Bool {
         return true
