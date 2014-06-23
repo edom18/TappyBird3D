@@ -3,7 +3,11 @@ import UIKit
 import QuartzCore
 import SceneKit
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, SCNSceneRendererDelegate {
+    
+    var boxNode: SCNNode!
+    var smallBoxNode: SCNNode!
+    var cameraNode: SCNNode!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -12,7 +16,7 @@ class GameViewController: UIViewController {
         let scene = SCNScene()
         
         // create and add a camera to the scene
-        let cameraNode = SCNNode()
+        cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
         scene.rootNode.addChildNode(cameraNode)
         
@@ -34,7 +38,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(ambientLightNode)
         
         // create and add a 3d box to the scene
-        let boxNode = SCNNode()
+        boxNode = SCNNode()
         let boxGeo  = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0.02)
         boxNode.geometry = boxGeo
         boxNode.position = SCNVector3(x:0, y:-1, z:0)
@@ -52,7 +56,7 @@ class GameViewController: UIViewController {
         // set the material to the 3d object geometry
         boxNode.geometry.firstMaterial = material
         
-        let smallBoxNode = SCNNode()
+        smallBoxNode = SCNNode()
         let smallBoxGeo  = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0.02)
         smallBoxNode.geometry = smallBoxGeo
         smallBoxNode.position = SCNVector3(x: 0, y: 1, z: 0)
@@ -60,6 +64,19 @@ class GameViewController: UIViewController {
 
         let smallBoxShape = SCNPhysicsShape(geometry: smallBoxGeo, options: nil)
         smallBoxNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: smallBoxShape)
+        
+        // configure a physics world.
+        let bridge = PhysWorldBridge()
+        bridge.physicsGravity(scene, withGravity: SCNVector3(x: 0, y: -98.0, z: 0))
+        
+        var displayLink: CADisplayLink = CADisplayLink(target: self, selector: "update:")
+        displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        
+//        let lookAtConstraint = SCNLookAtConstraint(target: smallBoxNode)
+//        cameraNode.constraints = [lookAtConstraint]
+
+        
+        //////////////////////////////////////////////////////
         
         // retrieve the SCNView
         let scnView = self.view as SCNView
@@ -76,6 +93,9 @@ class GameViewController: UIViewController {
         // configure the view
         scnView.backgroundColor = UIColor.blackColor()
         
+        // add a gameloop as delegate
+        scnView.delegate = self
+        
         // add a tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
         let gestureRecognizers = NSMutableArray()
@@ -84,6 +104,16 @@ class GameViewController: UIViewController {
         scnView.gestureRecognizers = gestureRecognizers
     }
     
+    func update(displayLink: CADisplayLink) {
+        cameraNode.position.z -= 0.01
+    }
+    
+    /**
+     *  Handle tap gesture.
+     *
+     *  @param {UIGestureRecognizer} gestureRecognize
+     *
+     */
     func handleTap(gestureRecognize: UIGestureRecognizer) {
         // retrieve the SCNView
         let scnView = self.view as SCNView
@@ -130,10 +160,5 @@ class GameViewController: UIViewController {
         } else {
             return Int(UIInterfaceOrientationMask.All.toRaw())
         }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
     }
 }
