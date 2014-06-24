@@ -1,6 +1,12 @@
 
 #import "PhysWorldBridge.h"
 
+@interface PhysWorldBridge ()
+
+//@property (nonatomic, copy) (^contactCallBack)();
+
+@end
+
 @implementation PhysWorldBridge
 
 - (id)init
@@ -21,6 +27,18 @@
            withGravity:(SCNVector3)gravity
 {
     scene.physicsWorld.gravity = gravity;
+}
+
+- (void)physicsDelegate:(SCNScene *)scene
+{
+    scene.physicsWorld.contactDelegate = self;
+//    self.contactCallBack = completion;
+}
+
+- (void)physicsWorld:(SCNPhysicsWorld *)world
+     didBeginContact:(SCNPhysicsContact *)contact
+{
+    NSLog(@"hoge");
 }
 
 @end
