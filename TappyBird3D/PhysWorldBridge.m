@@ -40,5 +40,15 @@
 {
     NSLog(@"hoge");
 }
+- (void)physicsWorld:(SCNPhysicsWorld *)world
+    didUpdateContact:(SCNPhysicsContact *)contact
+{
+    
+}
+- (void)physicsWorld:(SCNPhysicsWorld *)world
+       didEndContact:(SCNPhysicsContact *)contact
+{
+    
+}
 
 @end
