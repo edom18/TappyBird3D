@@ -12,7 +12,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var grounds   : SCNNode[] = SCNNode[]()
     var walls     : SCNNode[] = SCNNode[]()
     var currentPos: Float = 0
-    var speed     : Float = 0.01
+    var speed     : Float = 0.02
+
+    var gameover  : Bool = false
     
     let groundNum: Int = 7
     let groundLength: Float = 4.0
@@ -23,9 +25,23 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     func createPlayer() {
         playerBird = SCNNode()
         
-        let playerBirdGeo = SCNSphere(radius: 0.05)
+        let playerBirdGeo = SCNSphere(radius: 0.08)
         playerBird.geometry = playerBirdGeo
         playerBird.position = SCNVector3(x: 0, y: 1, z: 0)
+        
+        let material = SCNMaterial()
+        material.diffuse.contents = UIColor.grayColor()
+        material.specular.contents = UIColor.whiteColor()
+        material.reflective.contents = [
+            UIImage(named: "right"),
+            UIImage(named: "left"),
+            UIImage(named: "top"),
+            UIImage(named: "bottom"),
+            UIImage(named: "front"),
+            UIImage(named: "back")
+        ]
+        playerBird.geometry.firstMaterial = material
+        
         scene.rootNode.addChildNode(playerBird)
 
         let playerBirdShape = SCNPhysicsShape(geometry: playerBirdGeo, options: nil)
@@ -54,10 +70,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
         wallDown.position    = SCNVector3(x: 0, y: -0.25, z: -1.0)
         
-//        wall.addChildNode(wallUp)
-//        wall.addChildNode(wallDown)
-//        return wall
-        
         return (wallUp, wallDown)
     }
     
@@ -66,9 +78,12 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
      *  Set up field.
      */
     func setupField() {
+        let width:  CGFloat = 20.0
+        let height: CGFloat = 0.5
+        
         for i in 0..groundNum {
             let groundNode = SCNNode()
-            let groundGeo  = SCNBox(width: 1, height: 0.5, length: groundLength, chamferRadius: 0)
+            let groundGeo  = SCNBox(width: width, height: height, length: CGFloat(groundLength), chamferRadius: 0)
             groundNode.geometry = groundGeo
             groundNode.position = SCNVector3(x: 0, y: -1.0, z: -CFloat(Float(i) * groundLength))
             scene.rootNode.addChildNode(groundNode)
@@ -78,6 +93,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             
             let material = SCNMaterial()
             material.diffuse.contents  = UIImage(named: "texture")
+            material.diffuse.wrapT     = SCNWrapMode.Repeat
+            material.diffuse.wrapS     = SCNWrapMode.Repeat
             material.specular.contents = UIColor.grayColor()
             material.locksAmbientWithDiffuse = true
             groundNode.geometry.firstMaterial = material
@@ -206,6 +223,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     }
     
     func update(displayLink: CADisplayLink) {
+        
+        if gameover {
+            return
+        }
+
+        gameover = playerBird.presentationNode().position.z > 0
+        
         currentPos += speed
         
         let limitPos: Float = 4.0
@@ -249,8 +273,12 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
      *  @param {UIGestureRecognizer} gestureRecognize
      */
     func handleTap(gestureRecognize: UIGestureRecognizer) {
+        
+        if gameover {
+            return
+        }
+        
         let power: Float = 6.5
-        println(playerBird.physicsBody.velocityFactor.y)
         playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: power, z: 0), impulse: true)
     }
     
