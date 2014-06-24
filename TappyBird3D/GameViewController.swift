@@ -5,10 +5,16 @@ import SceneKit
 
 class GameViewController: UIViewController, SCNSceneRendererDelegate {
     
-    var boxNode: SCNNode!
+    var boxNode   : SCNNode!
     var playerBird: SCNNode!
     var cameraNode: SCNNode!
-    var scene: SCNScene!
+    var scene     : SCNScene!
+    var grounds   : SCNNode[] = SCNNode[]()
+    var walls     : SCNNode[] = SCNNode[]()
+    var currentPos: Float = 0
+    var speed     : Float = 0.01
+    
+    let groundNum: Int = 7
 
     /**
      *  Create a player bird object.
@@ -25,28 +31,53 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         playerBird.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: playerBirdShape)
     }
     
+    func createWall() -> SCNNode {
+        let wall     = SCNNode()
+        let wallUp   = SCNNode()
+        let wallDown = SCNNode()
+        let wallGeo  = SCNBox(width: 1.0, height: 3.0, length: 0.2, chamferRadius: 0)
+        let material = SCNMaterial()
+        
+        material.diffuse.contents  = UIImage(named: "texture")
+        material.specular.contents = UIColor.grayColor()
+        material.locksAmbientWithDiffuse = true
+        wallGeo.firstMaterial = material
+        
+        wallUp.geometry = wallGeo
+        wallUp.position = SCNVector3(x: 0, y: -0.5, z: 0)
+        
+        wallDown.geometry = wallGeo
+        wallUp.position   = SCNVector3(x: 0, y: 0.5, z: 0)
+        
+        wall.addChildNode(wallUp)
+        wall.addChildNode(wallDown)
+        
+        return wall
+    }
+    
+    
     /**
      *  Set up field.
      */
     func setupField() {
-        // create and add a 3d box to the scene
-        boxNode = SCNNode()
-        let boxGeo  = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0.02)
-        boxNode.geometry = boxGeo
-        boxNode.position = SCNVector3(x:0, y:-1, z:0)
-        scene.rootNode.addChildNode(boxNode)
-        
-        let boxShape = SCNPhysicsShape(geometry: boxGeo, options: nil)
-        boxNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: boxShape)
-        
-        // create and configure a material
-        let material = SCNMaterial()
-        material.diffuse.contents = UIImage(named: "texture")
-        material.specular.contents = UIColor.grayColor()
-        material.locksAmbientWithDiffuse = true
-        
-        // set the material to the 3d object geometry
-        boxNode.geometry.firstMaterial = material
+        for i in 0..groundNum {
+            let groundNode = SCNNode()
+            let groundGeo  = SCNBox(width: 1, height: 0.5, length: 1, chamferRadius: 0)
+            groundNode.geometry = groundGeo
+            groundNode.position = SCNVector3(x: 0, y: -1.0, z: CFloat(-i))
+            scene.rootNode.addChildNode(groundNode)
+            
+            let groundShape = SCNPhysicsShape(geometry: groundGeo, options: nil)
+            groundNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: groundShape)
+            
+            let material = SCNMaterial()
+            material.diffuse.contents  = UIImage(named: "texture")
+            material.specular.contents = UIColor.grayColor()
+            material.locksAmbientWithDiffuse = true
+            groundNode.geometry.firstMaterial = material
+            
+            grounds.append(groundNode)
+        }
     }
     
     /**
@@ -68,8 +99,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         scene.rootNode.addChildNode(ambientLightNode)
         
         // configure a physics world.
-        let bridge = PhysWorldBridge()
-        bridge.physicsGravity(scene, withGravity: SCNVector3(x: 0, y: -98.0, z: 0))
+//        let bridge = PhysWorldBridge()
+//        bridge.physicsGravity(scene, withGravity: SCNVector3(x: 0, y: -98.0, z: 0))
     }
     
     
@@ -130,6 +161,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         
         // create a new scene
         scene = SCNScene()
+        
+        // set up the skybox.
         scene.background.contents = [
             UIImage(named: "right"),
             UIImage(named: "left"),
@@ -141,11 +174,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         
         // create and add a camera to the scene
         cameraNode = SCNNode()
-        cameraNode.camera = SCNCamera()
+        cameraNode.camera   = SCNCamera()
+        cameraNode.position = SCNVector3(x: 0.75, y: 0, z: 3.0)
+        cameraNode.rotation = SCNVector4(x: 0, y: 1.0, z: 0, w: 0.2)
         scene.rootNode.addChildNode(cameraNode)
-        
-        // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 3)
         
         // Create a player.
         createPlayer()
@@ -167,7 +199,40 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     }
     
     func update(displayLink: CADisplayLink) {
-//        cameraNode.position.z -= 0.01
+        currentPos += speed
+        let index: Int = Int(currentPos)
+        let isPop: Bool = index != 0 && index % 2 == 0
+        
+//        if isPop {
+//            let wall = createWall()
+//            scene.rootNode.addChildNode(wall)
+//            walls += wall
+//        }
+        
+        for (i, g) in enumerate(grounds) {
+            var pos: SCNVector3 = g.position
+            pos.z += speed
+            
+            if pos.z > 2.5 {
+                pos.z -= Float(groundNum)
+                g.position = pos
+            }
+            else {
+                g.position = pos
+            }
+        }
+        
+        for (i, w) in enumerate(walls) {
+            var pos: SCNVector3 = w.position
+            pos.z += speed
+            
+            if pos.z > 1.5 {
+                w.removeFromParentNode()
+                walls.removeAtIndex(i)
+            }
+            
+            w.position = pos
+        }
     }
     
     /**
@@ -176,7 +241,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
      *  @param {UIGestureRecognizer} gestureRecognize
      */
     func handleTap(gestureRecognize: UIGestureRecognizer) {
-        playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: 20.5, z: 0), impulse: true)
+        let power: Float = 6.5
+        playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: power, z: 0), impulse: true)
     }
     
     override func shouldAutorotate() -> Bool {
