@@ -130,6 +130,14 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         
         // create a new scene
         scene = SCNScene()
+        scene.background.contents = [
+            UIImage(named: "right"),
+            UIImage(named: "left"),
+            UIImage(named: "top"),
+            UIImage(named: "bottom"),
+            UIImage(named: "front"),
+            UIImage(named: "back")
+        ]
         
         // create and add a camera to the scene
         cameraNode = SCNNode()
