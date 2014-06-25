@@ -34,28 +34,15 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
      *  Create a player bird object.
      */
     func createPlayer() {
-        playerBird = SCNNode()
-        
-        let playerBirdGeo = SCNSphere(radius: 0.08)
-        playerBird.geometry = playerBirdGeo
-        playerBird.position = SCNVector3(x: 0, y: 1, z: 0)
-        
-        let material = SCNMaterial()
-        material.diffuse.contents = UIColor.grayColor()
-        material.specular.contents = UIColor.whiteColor()
-        material.reflective.contents = [
-            UIImage(named: "right"),
-            UIImage(named: "left"),
-            UIImage(named: "top"),
-            UIImage(named: "bottom"),
-            UIImage(named: "front"),
-            UIImage(named: "back")
-        ]
-        playerBird.geometry.firstMaterial = material
-        
+        var url: NSURL = NSBundle.mainBundle().URLForResource("Suzanne", withExtension: "dae")
+        var sceneSource: SCNSceneSource = SCNSceneSource(URL: url, options: nil)
+        playerBird = sceneSource.entryWithIdentifier("Suzanne", withClass: SCNNode.self) as SCNNode
+
+        playerBird.position = SCNVector3(x: 0, y: 0, z: 0)
+        playerBird.scale = SCNVector3(x: 0.2, y: 0.2, z: 0.2)
         scene.rootNode.addChildNode(playerBird)
 
-        let playerBirdShape = SCNPhysicsShape(geometry: playerBirdGeo, options: nil)
+        let playerBirdShape = SCNPhysicsShape(geometry: playerBird.geometry, options: nil)
         playerBird.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: playerBirdShape)
     }
     
