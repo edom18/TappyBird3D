@@ -2,6 +2,7 @@
 import UIKit
 import QuartzCore
 import SceneKit
+import AudioToolbox
 
 class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysicsContactDelegate {
     
@@ -18,6 +19,16 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     
     let groundNum: Int = 7
     let groundLength: Float = 4.0
+    
+    /**
+     *  Play bound sound.
+     */
+    func playBoundSound() {
+        var soundID: SystemSoundID = 0
+        var soundURL: NSURL = NSBundle.mainBundle().URLForResource("pipo", withExtension: "wav")
+        AudioServicesCreateSystemSoundID(soundURL as CFURLRef, &soundID)
+        AudioServicesPlaySystemSound(soundID)
+    }
 
     /**
      *  Create a player bird object.
@@ -280,6 +291,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         let power: Float = 6.5
         playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: power, z: 0), impulse: true)
+        playBoundSound()
     }
     
     override func shouldAutorotate() -> Bool {

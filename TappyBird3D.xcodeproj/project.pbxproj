@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C04E3FE195AC070009762FF /* pipo.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5C04E3FD195AC070009762FF /* pipo.wav */; };
 		5C05C122195943A200C2A522 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C05C11C195943A200C2A522 /* back.png */; };
 		5C05C123195943A200C2A522 /* bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C05C11D195943A200C2A522 /* bottom.png */; };
 		5C05C124195943A200C2A522 /* front.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C05C11E195943A200C2A522 /* front.png */; };
@@ -32,6 +33,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C04E3FD195AC070009762FF /* pipo.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pipo.wav; sourceTree = "<group>"; };
 		5C05C11C195943A200C2A522 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = images/back.png; sourceTree = "<group>"; };
 		5C05C11D195943A200C2A522 /* bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bottom.png; path = images/bottom.png; sourceTree = "<group>"; };
 		5C05C11E195943A200C2A522 /* front.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = front.png; path = images/front.png; sourceTree = "<group>"; };
@@ -70,6 +72,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C04E3FC195AC050009762FF /* sound */ = {
+			isa = PBXGroup;
+			children = (
+				5C04E3FD195AC070009762FF /* pipo.wav */,
+			);
+			name = sound;
+			sourceTree = "<group>";
+		};
 		5C05C10F1959420000C2A522 /* images */ = {
 			isa = PBXGroup;
 			children = (
@@ -104,6 +114,7 @@
 		5C993C46195653980093F73B /* TappyBird3D */ = {
 			isa = PBXGroup;
 			children = (
+				5C04E3FC195AC050009762FF /* sound */,
 				5CFCB0C61959B5D0002C883E /* iPad */,
 				5C05C10F1959420000C2A522 /* images */,
 				5C993C49195653980093F73B /* AppDelegate.swift */,
@@ -236,6 +247,7 @@
 				5C05C123195943A200C2A522 /* bottom.png in Resources */,
 				5C05C124195943A200C2A522 /* front.png in Resources */,
 				5C05C127195943A200C2A522 /* top.png in Resources */,
+				5C04E3FE195AC070009762FF /* pipo.wav in Resources */,
 				5C05C122195943A200C2A522 /* back.png in Resources */,
 				5C05C126195943A200C2A522 /* right.png in Resources */,
 			);
