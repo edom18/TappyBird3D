@@ -47,13 +47,17 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         playerBird.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: playerBirdShape)
     }
     
+    
+    /**
+     *  Create walls as up and down.
+     */
     func createWall() -> (SCNNode, SCNNode) {
         let wall     = SCNNode()
         let wallUp   = SCNNode()
         let wallDown = SCNNode()
         
         let material1 = SCNMaterial()
-        material1.diffuse.contents  = UIColor.blueColor()
+        material1.diffuse.contents  = UIImage(named: "texture")
         material1.specular.contents = UIColor.grayColor()
         material1.locksAmbientWithDiffuse = true
         
@@ -68,7 +72,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         wallDown.position    = SCNVector3(x: 0, y: posYDown, z: -1.0)
         
         let material2 = SCNMaterial()
-        material2.diffuse.contents  = UIColor.redColor()
+        material2.diffuse.contents  = UIImage(named: "texture")
         material2.specular.contents = UIColor.grayColor()
         material2.locksAmbientWithDiffuse = true
         
@@ -105,7 +109,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             groundNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: groundShape)
             
             let material = SCNMaterial()
-            material.diffuse.contents  = UIImage(named: "texture")
+            material.diffuse.contents  = UIImage(named: "ground")
             material.diffuse.wrapT     = SCNWrapMode.Repeat
             material.diffuse.wrapS     = SCNWrapMode.Repeat
             material.specular.contents = UIColor.grayColor()
@@ -136,8 +140,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         // configure a physics world.
         let bridge = PhysWorldBridge()
-//        bridge.physicsDelegate(scene)
-        // bridge.physicsGravity(scene, withGravity: SCNVector3(x: 0, y: -98.0, z: 0))
+        // bridge.physicsDelegate(scene)
+        bridge.physicsGravity(scene, withGravity: SCNVector3(x: 0, y: -0.98, z: 0))
     }
     
     
@@ -163,7 +167,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         gestureRecognizers.addObjectsFromArray(scnView.gestureRecognizers)
         scnView.gestureRecognizers = gestureRecognizers
     }
-    
     
     /**
      *  Configure a view.
@@ -291,7 +294,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             return
         }
         
-        let power: Float = 6.5
+        let power: Float = 1.0
         playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: power, z: 0), impulse: true)
         playBoundSound()
     }
