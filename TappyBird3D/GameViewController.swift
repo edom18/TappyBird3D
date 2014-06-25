@@ -37,12 +37,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         var url: NSURL = NSBundle.mainBundle().URLForResource("Suzanne", withExtension: "dae")
         var sceneSource: SCNSceneSource = SCNSceneSource(URL: url, options: nil)
         playerBird = sceneSource.entryWithIdentifier("Suzanne", withClass: SCNNode.self) as SCNNode
-
-        playerBird.position = SCNVector3(x: 0, y: 0, z: 0)
-        playerBird.scale = SCNVector3(x: 0.2, y: 0.2, z: 0.2)
+        playerBird.scale    = SCNVector3(x: 0.2, y: 0.2, z: 0.2)
+        playerBird.position = SCNVector3(x: 0, y: 1.0, z: 0)
         scene.rootNode.addChildNode(playerBird)
 
-        let playerBirdShape = SCNPhysicsShape(geometry: playerBird.geometry, options: nil)
+        let playerBirdShape = SCNPhysicsShape(node: playerBird, options: [
+            SCNPhysicsShapeScaleKey: NSValue(SCNVector3: SCNVector3(x: 0.2, y: 0.2, z: 0.2))
+        ])
         playerBird.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: playerBirdShape)
     }
     
@@ -50,23 +51,37 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         let wall     = SCNNode()
         let wallUp   = SCNNode()
         let wallDown = SCNNode()
-        let wallGeo  = SCNBox(width: 1.0, height: 1.0, length: 0.5, chamferRadius: 0)
-        let material = SCNMaterial()
-        let wallShape = SCNPhysicsShape(geometry: wallGeo, options: nil)
-        let wallBody  = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
         
-        material.diffuse.contents  = UIImage(named: "texture")
-        material.specular.contents = UIColor.grayColor()
-        material.locksAmbientWithDiffuse = true
-        wallGeo.firstMaterial = material
+        let material1 = SCNMaterial()
+        material1.diffuse.contents  = UIColor.blueColor()
+        material1.specular.contents = UIColor.grayColor()
+        material1.locksAmbientWithDiffuse = true
         
-        wallUp.geometry    = wallGeo
-        wallUp.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
-        wallUp.position    = SCNVector3(x: 0, y: 2.0, z: -1.0)
+        let heightDown = CGFloat((arc4random_uniform(UInt32(5)) + 10)) / 10.0
+        let wallGeo1   = SCNBox(width: 1.0, height: heightDown, length: 0.5, chamferRadius: 0)
+        let wallShape1 = SCNPhysicsShape(geometry: wallGeo1, options: nil)
+        let wallBody1  = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape1)
+        wallGeo1.firstMaterial = material1
+        wallDown.geometry    = wallGeo1
+        wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape1)
+        let posYDown = heightDown * 0.5 - 0.75
+        wallDown.position    = SCNVector3(x: 0, y: posYDown, z: -1.0)
         
-        wallDown.geometry    = wallGeo
-        wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
-        wallDown.position    = SCNVector3(x: 0, y: -0.25, z: -1.0)
+        let material2 = SCNMaterial()
+        material2.diffuse.contents  = UIColor.redColor()
+        material2.specular.contents = UIColor.grayColor()
+        material2.locksAmbientWithDiffuse = true
+        
+        let interval   = CGFloat(1.2)
+        let heightUp   = CGFloat(2.0)
+        let wallGeo2   = SCNBox(width: 1.0, height: heightUp, length: 0.5, chamferRadius: 0)
+        let wallShape2 = SCNPhysicsShape(geometry: wallGeo2, options: nil)
+        let wallBody2  = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape2)
+        wallGeo2.firstMaterial = material2
+        wallUp.geometry    = wallGeo2
+        wallUp.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape2)
+        let posYUp = (heightDown - 0.75) + (heightUp * 0.5) + interval
+        wallUp.position    = SCNVector3(x: 0, y: posYUp, z: -1.0)
         
         return (wallUp, wallDown)
     }
@@ -226,7 +241,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             return
         }
 
-        gameover = playerBird.presentationNode().position.z > 0
+        gameover = playerBird.presentationNode().position.z != 0
         
         currentPos += speed
         
@@ -257,7 +272,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             
             if pos.z > limitPos {
                 w.removeFromParentNode()
-//                walls.removeAtIndex(i)
+                // walls.removeAtIndex(i)
                 continue
             }
             
