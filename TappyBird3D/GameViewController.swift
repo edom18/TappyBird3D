@@ -41,9 +41,11 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         playerBird.position = SCNVector3(x: 0, y: 1.0, z: 0)
         scene.rootNode.addChildNode(playerBird)
 
-        let playerBirdShape = SCNPhysicsShape(node: playerBird, options: [
-            SCNPhysicsShapeScaleKey: NSValue(SCNVector3: SCNVector3(x: 0.2, y: 0.2, z: 0.2))
-        ])
+        // TODO: Why? BAD_ACCESS error raised in iOS Simulator.
+        // let playerBirdShape = SCNPhysicsShape(node: playerBird, options: [
+        //     SCNPhysicsShapeScaleKey: NSValue(SCNVector3: SCNVector3(x: 0.2, y: 0.2, z: 0.2))
+        // ])
+        let playerBirdShape = SCNPhysicsShape(node: playerBird, options: nil)
         playerBird.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: playerBirdShape)
     }
     
