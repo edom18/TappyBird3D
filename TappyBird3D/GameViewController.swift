@@ -34,17 +34,25 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
      *  Create a player bird object.
      */
     func createPlayer() {
-        var url: NSURL = NSBundle.mainBundle().URLForResource("Suzanne", withExtension: "dae")
-        var sceneSource: SCNSceneSource = SCNSceneSource(URL: url, options: nil)
-        playerBird = sceneSource.entryWithIdentifier("Suzanne", withClass: SCNNode.self) as SCNNode
-        playerBird.scale    = SCNVector3(x: 0.2, y: 0.2, z: 0.2)
-        playerBird.position = SCNVector3(x: 0, y: 1.0, z: 0)
+        let fileName: String   = "bird"
+        let url: NSURL = NSBundle.mainBundle().URLForResource(fileName, withExtension: "dae")
+        let sceneSource: SCNSceneSource = SCNSceneSource(URL: url, options: nil)
+        
+        playerBird = SCNNode()
+        
+        let nodeNames  = sceneSource.identifiersOfEntriesWithClass(SCNNode.self)
+        let body = SCNNode()
+        for nodeName: AnyObject in nodeNames {
+            let node = sceneSource.entryWithIdentifier(nodeName as NSString, withClass: SCNNode.self) as SCNNode
+            body.addChildNode(node as SCNNode)
+        }
+        
+        let animation = sceneSource.entryWithIdentifier("wing_R_rotation_euler_Y", withClass: CAAnimation.self) as CAAnimation
+        body.addAnimation(animation, forKey: "wing_R")
+        
+        playerBird.addChildNode(body)
         scene.rootNode.addChildNode(playerBird)
-
-        // TODO: Why? BAD_ACCESS error raised in iOS Simulator.
-        // let playerBirdShape = SCNPhysicsShape(node: playerBird, options: [
-        //     SCNPhysicsShapeScaleKey: NSValue(SCNVector3: SCNVector3(x: 0.2, y: 0.2, z: 0.2))
-        // ])
+        
         let playerBirdShape = SCNPhysicsShape(node: playerBird, options: nil)
         playerBird.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: playerBirdShape)
     }
@@ -188,6 +196,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         // configure the view
         scnView.backgroundColor = UIColor.blackColor()
+        
+        // Turn off camera controling
+        scnView.allowsCameraControl = false
         
         // add a gameloop as delegate
         scnView.delegate = self

@@ -15,6 +15,7 @@
 		5C05C125195943A200C2A522 /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C05C11F195943A200C2A522 /* left.png */; };
 		5C05C126195943A200C2A522 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C05C120195943A200C2A522 /* right.png */; };
 		5C05C127195943A200C2A522 /* top.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C05C121195943A200C2A522 /* top.png */; };
+		5C6CC4BA195C00DF00665EA0 /* bird.dae in Resources */ = {isa = PBXBuildFile; fileRef = 5C6CC4B9195C00DF00665EA0 /* bird.dae */; };
 		5C74E233195B25CA0087DABE /* ground.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C74E232195B25CA0087DABE /* ground.png */; };
 		5C993C4A195653980093F73B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C993C49195653980093F73B /* AppDelegate.swift */; };
 		5C993C4C195653980093F73B /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C993C4B195653980093F73B /* GameViewController.swift */; };
@@ -43,6 +44,7 @@
 		5C05C11F195943A200C2A522 /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = left.png; path = images/left.png; sourceTree = "<group>"; };
 		5C05C120195943A200C2A522 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = right.png; path = images/right.png; sourceTree = "<group>"; };
 		5C05C121195943A200C2A522 /* top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = top.png; path = images/top.png; sourceTree = "<group>"; };
+		5C6CC4B9195C00DF00665EA0 /* bird.dae */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml.dae; path = bird.dae; sourceTree = "<group>"; };
 		5C74E232195B25CA0087DABE /* ground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground.png; sourceTree = "<group>"; };
 		5C993C44195653980093F73B /* TappyBird3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TappyBird3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C993C48195653980093F73B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -119,7 +121,7 @@
 		5C993C46195653980093F73B /* TappyBird3D */ = {
 			isa = PBXGroup;
 			children = (
-				5C04E401195AEFB0009762FF /* Suzanne.dae */,
+				5C9ACE3F195BB8C7009E1277 /* 3DModel */,
 				5C04E3FC195AC050009762FF /* sound */,
 				5CFCB0C61959B5D0002C883E /* iPad */,
 				5C05C10F1959420000C2A522 /* images */,
@@ -158,6 +160,15 @@
 				5C993C5B195653990093F73B /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5C9ACE3F195BB8C7009E1277 /* 3DModel */ = {
+			isa = PBXGroup;
+			children = (
+				5C6CC4B9195C00DF00665EA0 /* bird.dae */,
+				5C04E401195AEFB0009762FF /* Suzanne.dae */,
+			);
+			name = 3DModel;
 			sourceTree = "<group>";
 		};
 		5CFCB0C61959B5D0002C883E /* iPad */ = {
@@ -256,6 +267,7 @@
 				5C05C127195943A200C2A522 /* top.png in Resources */,
 				5C04E402195AEFB0009762FF /* Suzanne.dae in Resources */,
 				5C04E3FE195AC070009762FF /* pipo.wav in Resources */,
+				5C6CC4BA195C00DF00665EA0 /* bird.dae in Resources */,
 				5C05C122195943A200C2A522 /* back.png in Resources */,
 				5C05C126195943A200C2A522 /* right.png in Resources */,
 			);
