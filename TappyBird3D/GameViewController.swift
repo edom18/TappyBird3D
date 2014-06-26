@@ -62,44 +62,52 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
      *  Create walls as up and down.
      */
     func createWall() -> (SCNNode, SCNNode) {
-        let wall     = SCNNode()
+        let wallHeight: CGFloat = 10.0
+        let interval = CGFloat(1.2)
         let wallUp   = SCNNode()
         let wallDown = SCNNode()
         
-        let material1 = SCNMaterial()
-        material1.diffuse.contents  = UIImage(named: "texture")
-        material1.specular.contents = UIColor.grayColor()
-        material1.locksAmbientWithDiffuse = true
+        let material = SCNMaterial()
+        material.diffuse.contents  = UIImage(named: "texture")
+        material.specular.contents = UIColor.grayColor()
+        material.locksAmbientWithDiffuse = true
         
-        let heightDown = CGFloat((arc4random_uniform(UInt32(5)) + 10)) / 10.0
-        let wallGeo1   = SCNBox(width: 1.0, height: heightDown, length: 0.5, chamferRadius: 0)
-        let wallShape1 = SCNPhysicsShape(geometry: wallGeo1, options: nil)
-        let wallBody1  = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape1)
-        wallGeo1.firstMaterial = material1
-        wallDown.geometry    = wallGeo1
-        wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape1)
-        let posYDown = heightDown * 0.5 - 0.75
-        wallDown.position    = SCNVector3(x: 0, y: posYDown, z: -1.0)
+        let wallGeo   = SCNBox(width: 1.0, height: wallHeight, length: 0.5, chamferRadius: 0)
+        let wallShape = SCNPhysicsShape(geometry: wallGeo, options: nil)
+        let wallBody  = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
+        wallGeo.firstMaterial = material
+        wallDown.geometry    = wallGeo
+        wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
+        let posYDown         = CFloat(-wallHeight / 2.0 - interval / 2.0 + 1.0)
+        wallDown.position    = SCNVector3(x: 0, y: posYDown, z: 0)
         
-        let material2 = SCNMaterial()
-        material2.diffuse.contents  = UIImage(named: "texture")
-        material2.specular.contents = UIColor.grayColor()
-        material2.locksAmbientWithDiffuse = true
-        
-        let interval   = CGFloat(1.2)
-        let heightUp   = CGFloat(2.0)
-        let wallGeo2   = SCNBox(width: 1.0, height: heightUp, length: 0.5, chamferRadius: 0)
-        let wallShape2 = SCNPhysicsShape(geometry: wallGeo2, options: nil)
-        let wallBody2  = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape2)
-        wallGeo2.firstMaterial = material2
-        wallUp.geometry    = wallGeo2
-        wallUp.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape2)
-        let posYUp = (heightDown - 0.75) + (heightUp * 0.5) + interval
-        wallUp.position    = SCNVector3(x: 0, y: posYUp, z: -1.0)
+        wallUp.geometry    = wallGeo
+        wallUp.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
+        let posYUp         = CFloat(wallHeight / 2.0 + interval / 2.0 + 1.0)
+        wallUp.position    = SCNVector3(x: 0, y: posYUp, z: 0)
         
         return (wallUp, wallDown)
     }
     
+    
+    /**
+     *  Set up walls.
+     */
+    func setupWalls() {
+        for i in 0..groundNum {
+            let (wallUp, wallDown) = createWall()
+            let z = -CFloat(Float(i + 1) * groundLength)
+            let delta: CFloat = CFloat(arc4random_uniform(UInt32(10))) / 10
+            wallUp.position.z    = z
+            wallUp.position.y   += delta
+            wallDown.position.z  = z
+            wallDown.position.y += delta
+            scene.rootNode.addChildNode(wallUp)
+            scene.rootNode.addChildNode(wallDown)
+            walls += wallUp
+            walls += wallDown
+        }
+    }
     
     /**
      *  Set up field.
@@ -189,16 +197,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         scnView.scene = scene
         
         // allows the user to manipulate the camera
-        scnView.allowsCameraControl = true
+        // scnView.allowsCameraControl = true
         
         // show statistics such as fps and timing information
         scnView.showsStatistics = true
         
         // configure the view
         scnView.backgroundColor = UIColor.blackColor()
-        
-        // Turn off camera controling
-        scnView.allowsCameraControl = false
         
         // add a gameloop as delegate
         scnView.delegate = self
@@ -228,8 +233,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         // create and add a camera to the scene
         cameraNode = SCNNode()
         cameraNode.camera   = SCNCamera()
-        cameraNode.position = SCNVector3(x: 0.75, y: 1.0, z: 3.0)
-        cameraNode.rotation = SCNVector4(x: 0, y: 1.0, z: 0, w: 0.2)
+        cameraNode.position = SCNVector3(x: 2.0, y: 1.0, z: 3.5)
+        cameraNode.rotation = SCNVector4(x: 0, y: 1.0, z: 0, w: 0.35)
         scene.rootNode.addChildNode(cameraNode)
         
         // Create a player.
@@ -240,6 +245,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         // Set up field.
         setupField()
+        
+        // Set up walls
+        setupWalls()
         
         // Configure a view.
         configureView()
@@ -270,29 +278,28 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             if pos.z > limitPos {
                 pos.z -= Float(groundNum) * groundLength
                 g.position = pos
-                
-                let (wallUp, wallDown) = createWall()
-                scene.rootNode.addChildNode(wallUp)
-                scene.rootNode.addChildNode(wallDown)
-                walls += wallUp
-                walls += wallDown
             }
             else {
                 g.position = pos
             }
         }
         
-        for (i, w) in enumerate(walls) {
-            var pos: SCNVector3 = w.position
+        for var i = 0, l = walls.count; i < l; i += 2 {
+            let w1 = walls[i + 0]
+            let w2 = walls[i + 1]
+            
+            var pos: SCNVector3 = w1.position
             pos.z += speed
             
             if pos.z > limitPos {
-                w.removeFromParentNode()
-                // walls.removeAtIndex(i)
-                continue
+                pos.z -= Float(groundNum) * groundLength
+                w1.position = pos
+                w2.position.z = pos.z
             }
-            
-            w.position = pos
+            else {
+                w1.position = pos
+                w2.position.z = pos.z
+            }
         }
     }
     
