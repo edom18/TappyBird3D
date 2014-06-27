@@ -34,11 +34,12 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
      *  Create a player bird object.
      */
     func createPlayer() {
-        let fileName: String   = "bird"
+        let fileName: String = "bird"
         let url: NSURL = NSBundle.mainBundle().URLForResource(fileName, withExtension: "dae")
         let sceneSource: SCNSceneSource = SCNSceneSource(URL: url, options: nil)
         
         playerBird = SCNNode()
+        playerBird.position.y = 1.5
         
         let nodeNames  = sceneSource.identifiersOfEntriesWithClass(SCNNode.self)
         let body = SCNNode()
@@ -68,11 +69,20 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         let wallDown = SCNNode()
         
         let material = SCNMaterial()
-        material.diffuse.contents  = UIImage(named: "texture")
+        material.diffuse.contents  = UIColor.greenColor() // UIImage(named: "texture")
+        material.reflective.contents = [
+            UIImage(named: "right"),
+            UIImage(named: "left"),
+            UIImage(named: "top"),
+            UIImage(named: "bottom"),
+            UIImage(named: "front"),
+            UIImage(named: "back")
+        ]
+
         material.specular.contents = UIColor.grayColor()
         material.locksAmbientWithDiffuse = true
         
-        let wallGeo   = SCNBox(width: 1.0, height: wallHeight, length: 0.5, chamferRadius: 0)
+        let wallGeo   = SCNCylinder(radius: 0.8, height: wallHeight)
         let wallShape = SCNPhysicsShape(geometry: wallGeo, options: nil)
         let wallBody  = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
         wallGeo.firstMaterial = material
@@ -143,11 +153,11 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
      */
     func setupEnv() {
         // create and add a light to the scene
-        let lightNode = SCNNode()
-        lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
-        lightNode.light = SCNLight()
-        lightNode.light.type = SCNLightTypeOmni
-        scene.rootNode.addChildNode(lightNode)
+        let lightOmniNode = SCNNode()
+        lightOmniNode.position = SCNVector3(x: 0, y: 10, z: 10)
+        lightOmniNode.light = SCNLight()
+        lightOmniNode.light.type = SCNLightTypeOmni
+        scene.rootNode.addChildNode(lightOmniNode)
         
         // create and add an ambient light to the scene
         let ambientLightNode = SCNNode()
@@ -159,7 +169,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         // configure a physics world.
         let bridge = PhysWorldBridge()
         // bridge.physicsDelegate(scene)
-        bridge.physicsGravity(scene, withGravity: SCNVector3(x: 0, y: -0.98, z: 0))
+        bridge.physicsGravity(scene, withGravity: SCNVector3(x: 0, y: -1.98, z: 0))
     }
     
     
@@ -233,8 +243,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         // create and add a camera to the scene
         cameraNode = SCNNode()
         cameraNode.camera   = SCNCamera()
-        cameraNode.position = SCNVector3(x: 2.0, y: 1.0, z: 3.5)
-        cameraNode.rotation = SCNVector4(x: 0, y: 1.0, z: 0, w: 0.35)
+        cameraNode.position = SCNVector3(x: 2.5, y: 1.5, z: 3.5)
+        cameraNode.rotation = SCNVector4(x: 0, y: 1.0, z: 0, w: 0.40)
         scene.rootNode.addChildNode(cameraNode)
         
         // Create a player.
@@ -314,7 +324,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             return
         }
         
-        let power: Float = 1.0
+        let power: Float = 1.8
         playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: power, z: 0), impulse: true)
         playBoundSound()
     }
