@@ -169,7 +169,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         // configure a physics world.
         let bridge = PhysWorldBridge()
         // bridge.physicsDelegate(scene)
-        bridge.physicsGravity(scene, withGravity: SCNVector3(x: 0, y: -1.98, z: 0))
+        bridge.physicsGravity(scene, withGravity: SCNVector3(x: 0, y: -2.98, z: 0))
     }
     
     
@@ -229,6 +229,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         // create a new scene
         scene = SCNScene()
+        scene.fogStartDistance = 13.0
+        scene.fogEndDistance   = 25.0
+        scene.fogColor         = UIColor.whiteColor()
         
         // set up the skybox.
         scene.background.contents = [
