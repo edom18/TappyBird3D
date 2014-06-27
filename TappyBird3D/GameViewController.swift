@@ -3,6 +3,7 @@ import UIKit
 import QuartzCore
 import SceneKit
 import AudioToolbox
+import OpenGLES
 
 class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysicsContactDelegate {
     
@@ -19,6 +20,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     
     let groundNum: Int = 7
     let groundLength: Float = 4.0
+    
+    var frameBuffer: GLint = 0
     
     /**
      *  Play bound sound.
@@ -217,6 +220,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         // add a gameloop as delegate
         scnView.delegate = self
+        
+        LobiRec.setCurrentContext(scnView.eaglContext, withGLView: scnView)
     }
     
 
@@ -272,6 +277,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         startGameLoop()
     }
     
+
+    /**
+     *  Update the scene.
+     */
     func update(displayLink: CADisplayLink) {
         
         if gameover {
@@ -279,6 +288,19 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         }
 
         gameover = playerBird.presentationNode().position.z != 0
+        
+        if gameover {
+            LobiRec.stopCapturing()
+            
+            if LobiRec.hasMovie() {
+                LobiRec.presentLobiPostWithTitle("title",
+                    postDescrition: "description",
+                    postScore: 30,
+                    postCategory: "category",
+                    prepareHandler: nil,
+                    afterHandler: nil)
+            }
+        }
         
         currentPos += speed
         
@@ -330,6 +352,19 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         let power: Float = 1.8
         playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: power, z: 0), impulse: true)
         playBoundSound()
+    }
+    
+    func renderer(aRenderer: SCNSceneRenderer!, willRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
+        if (frameBuffer == 0) {
+            glGetIntegerv(GLenum(GL_FRAMEBUFFER_BINDING), &frameBuffer)
+            LobiRec.createFramebuffer(GLuint(frameBuffer))
+            LobiRec.startCapturing()
+        }
+        LobiRec.prepareFrame()
+    }
+    
+    func renderer(aRenderer: SCNSceneRenderer!, didRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
+        LobiRec.appendFrame(GLuint(frameBuffer))
     }
     
     override func shouldAutorotate() -> Bool {
