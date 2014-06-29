@@ -21,8 +21,6 @@ class FlapScene : SCNScene {
     
     let groundNum: Int = 6
     let groundLength: Float = 4.0
-    
-    var frameBuffer: GLint = 0
 
     /**
      *  Initializer
@@ -391,19 +389,4 @@ class FlapScene : SCNScene {
         gestureRecognizers.addObjectsFromArray(view.gestureRecognizers)
         view.gestureRecognizers = gestureRecognizers
     }
-
-    
-//    func renderer(aRenderer: SCNSceneRenderer!, willRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
-//        if (frameBuffer == 0) {
-//            glGetIntegerv(GLenum(GL_FRAMEBUFFER_BINDING), &frameBuffer)
-//            LobiRec.createFramebuffer(GLuint(frameBuffer))
-//            LobiRec.startCapturing()
-//        }
-//        LobiRec.prepareFrame()
-//    }
-//    
-//    func renderer(aRenderer: SCNSceneRenderer!, didRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
-//        LobiRec.appendFrame(GLuint(frameBuffer))
-//    }
-    
 }
