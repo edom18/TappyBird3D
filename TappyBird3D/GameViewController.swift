@@ -45,16 +45,17 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         playerBird.position.y = 1.5
         
         let nodeNames  = sceneSource.identifiersOfEntriesWithClass(SCNNode.self)
-        let body = SCNNode()
-        for nodeName: AnyObject in nodeNames {
-            let node = sceneSource.entryWithIdentifier(nodeName as NSString, withClass: SCNNode.self) as SCNNode
-            body.addChildNode(node as SCNNode)
-        }
-        
-        let animation = sceneSource.entryWithIdentifier("wing_R_rotation_euler_Y", withClass: CAAnimation.self) as CAAnimation
-        body.addAnimation(animation, forKey: "wing_R")
-        
+        let body   = sceneSource.entryWithIdentifier("body",   withClass: SCNNode.self) as SCNNode
+        let wing_L = sceneSource.entryWithIdentifier("wing_L", withClass: SCNNode.self) as SCNNode
+        let wing_R = sceneSource.entryWithIdentifier("wing_R", withClass: SCNNode.self) as SCNNode
         playerBird.addChildNode(body)
+        playerBird.addChildNode(wing_L)
+        playerBird.addChildNode(wing_R)
+        
+        // println(sceneSource.identifiersOfEntriesWithClass(CAAnimation.self))
+        let bodyAnim    = sceneSource.entryWithIdentifier("body_location_X",   withClass: CAAnimation.self) as CAAnimation
+        playerBird.addAnimation(bodyAnim, forKey: "flap")
+        
         scene.rootNode.addChildNode(playerBird)
         
         let playerBirdShape = SCNPhysicsShape(node: playerBird, options: nil)
@@ -72,22 +73,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         let wallDown = SCNNode()
         
         let material = SCNMaterial()
-        material.diffuse.contents  = UIColor.greenColor() // UIImage(named: "texture")
-        material.reflective.contents = [
-            UIImage(named: "right"),
-            UIImage(named: "left"),
-            UIImage(named: "top"),
-            UIImage(named: "bottom"),
-            UIImage(named: "front"),
-            UIImage(named: "back")
-        ]
+        material.diffuse.contents = UIColor(red: 0.03, green: 0.59, blue: 0.25, alpha: 1)
 
         material.specular.contents = UIColor.grayColor()
         material.locksAmbientWithDiffuse = true
         
         let wallGeo   = SCNCylinder(radius: 0.8, height: wallHeight)
         let wallShape = SCNPhysicsShape(geometry: wallGeo, options: nil)
-        let wallBody  = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
         wallGeo.firstMaterial = material
         wallDown.geometry    = wallGeo
         wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
@@ -129,26 +121,44 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         let width:  CGFloat = 20.0
         let height: CGFloat = 0.5
         
-        for i in 0..groundNum {
-            let groundNode = SCNNode()
-            let groundGeo  = SCNBox(width: width, height: height, length: CGFloat(groundLength), chamferRadius: 0)
-            groundNode.geometry = groundGeo
-            groundNode.position = SCNVector3(x: 0, y: -1.0, z: -CFloat(Float(i) * groundLength))
-            scene.rootNode.addChildNode(groundNode)
-            
-            let groundShape = SCNPhysicsShape(geometry: groundGeo, options: nil)
-            groundNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: groundShape)
-            
-            let material = SCNMaterial()
-            material.diffuse.contents  = UIImage(named: "ground")
-            material.diffuse.wrapT     = SCNWrapMode.Repeat
-            material.diffuse.wrapS     = SCNWrapMode.Repeat
-            material.specular.contents = UIColor.grayColor()
-            material.locksAmbientWithDiffuse = true
-            groundNode.geometry.firstMaterial = material
-            
-            grounds.append(groundNode)
-        }
+        let groundGeo  = SCNBox(width: width, height: height, length: CGFloat(groundLength), chamferRadius: 0)
+//        let material = SCNMaterial()
+//        material.diffuse.contents  = UIImage(named: "ground")
+//        material.diffuse.wrapT     = SCNWrapMode.Repeat
+//        material.diffuse.wrapS     = SCNWrapMode.Repeat
+//        material.specular.contents = UIColor.grayColor()
+//        material.locksAmbientWithDiffuse = true
+        
+//        for i in 0..groundNum {
+//            let groundNode = SCNNode()
+//            groundNode.geometry = groundGeo
+//            groundNode.position = SCNVector3(x: 0, y: -1.0, z: -CFloat(Float(i) * groundLength))
+//            scene.rootNode.addChildNode(groundNode)
+//            
+//            groundNode.geometry.firstMaterial = material
+//            grounds.append(groundNode)
+//        }
+        
+        // for hit test ground.
+        let groundNode = SCNNode()
+        groundNode.geometry = groundGeo
+        groundNode.position = SCNVector3(x: 0, y: -1.0, z: 0)
+        groundNode.opacity = 0
+        scene.rootNode.addChildNode(groundNode)
+        
+        let groundShape = SCNPhysicsShape(geometry: groundGeo, options: nil)
+        groundNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: groundShape)
+        
+        // create a floor.
+        let floorNode = SCNNode()
+        let floor = SCNFloor()
+        let floorMaterial = SCNMaterial()
+        floorMaterial.diffuse.contents = UIColor.grayColor()
+        floor.firstMaterial = floorMaterial
+        floor.reflectivity = 0.1
+        floorNode.geometry = floor
+        floorNode.position = SCNVector3(x: 0, y: -0.9, z: 0)
+        scene.rootNode.addChildNode(floorNode)
     }
     
     /**
@@ -221,7 +231,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         // add a gameloop as delegate
         scnView.delegate = self
         
-        LobiRec.setCurrentContext(scnView.eaglContext, withGLView: scnView)
+//        LobiRec.setCurrentContext(scnView.eaglContext, withGLView: scnView)
     }
     
 
@@ -290,34 +300,34 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         gameover = playerBird.presentationNode().position.z != 0
         
         if gameover {
-            LobiRec.stopCapturing()
+//            LobiRec.stopCapturing()
             
-            if LobiRec.hasMovie() {
-                LobiRec.presentLobiPostWithTitle("title",
-                    postDescrition: "description",
-                    postScore: 30,
-                    postCategory: "category",
-                    prepareHandler: nil,
-                    afterHandler: nil)
-            }
+//            if LobiRec.hasMovie() {
+//                LobiRec.presentLobiPostWithTitle("title",
+//                    postDescrition: "description",
+//                    postScore: 30,
+//                    postCategory: "category",
+//                    prepareHandler: nil,
+//                    afterHandler: nil)
+//            }
         }
         
         currentPos += speed
         
         let limitPos: Float = 4.0
         
-        for (i, g) in enumerate(grounds) {
-            var pos: SCNVector3 = g.position
-            pos.z += speed
-            
-            if pos.z > limitPos {
-                pos.z -= Float(groundNum) * groundLength
-                g.position = pos
-            }
-            else {
-                g.position = pos
-            }
-        }
+//        for (i, g) in enumerate(grounds) {
+//            var pos: SCNVector3 = g.position
+//            pos.z += speed
+//            
+//            if pos.z > limitPos {
+//                pos.z -= Float(groundNum) * groundLength
+//                g.position = pos
+//            }
+//            else {
+//                g.position = pos
+//            }
+//        }
         
         for var i = 0, l = walls.count; i < l; i += 2 {
             let w1 = walls[i + 0]
@@ -354,18 +364,18 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         playBoundSound()
     }
     
-    func renderer(aRenderer: SCNSceneRenderer!, willRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
-        if (frameBuffer == 0) {
-            glGetIntegerv(GLenum(GL_FRAMEBUFFER_BINDING), &frameBuffer)
-            LobiRec.createFramebuffer(GLuint(frameBuffer))
-            LobiRec.startCapturing()
-        }
-        LobiRec.prepareFrame()
-    }
-    
-    func renderer(aRenderer: SCNSceneRenderer!, didRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
-        LobiRec.appendFrame(GLuint(frameBuffer))
-    }
+//    func renderer(aRenderer: SCNSceneRenderer!, willRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
+//        if (frameBuffer == 0) {
+//            glGetIntegerv(GLenum(GL_FRAMEBUFFER_BINDING), &frameBuffer)
+//            LobiRec.createFramebuffer(GLuint(frameBuffer))
+//            LobiRec.startCapturing()
+//        }
+//        LobiRec.prepareFrame()
+//    }
+//    
+//    func renderer(aRenderer: SCNSceneRenderer!, didRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
+//        LobiRec.appendFrame(GLuint(frameBuffer))
+//    }
     
     override func shouldAutorotate() -> Bool {
         return true
