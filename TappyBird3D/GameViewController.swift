@@ -4,6 +4,7 @@ import QuartzCore
 import SceneKit
 import AudioToolbox
 import OpenGLES
+import AVFoundation
 
 class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysicsContactDelegate {
     
@@ -17,6 +18,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var speed     : Float = 0.02
 
     var gameover  : Bool = false
+    var audioPlayer = AVAudioPlayer()
     
     let groundNum: Int = 7
     let groundLength: Float = 4.0
@@ -28,9 +30,20 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
      */
     func playBoundSound() {
         var soundID: SystemSoundID = 0
-        var soundURL: NSURL = NSBundle.mainBundle().URLForResource("pipo", withExtension: "wav")
+        var soundURL: NSURL = NSBundle.mainBundle().URLForResource("flap1", withExtension: "mp3")
         AudioServicesCreateSystemSoundID(soundURL as CFURLRef, &soundID)
         AudioServicesPlaySystemSound(soundID)
+    }
+    
+    /**
+     *  Play BGM.
+     */
+    func playBGM() {
+        var bgmURL = NSBundle.mainBundle().URLForResource("bgm1", withExtension: "mp3")
+        println(bgmURL)
+        audioPlayer = AVAudioPlayer(contentsOfURL: bgmURL, error: nil)
+        audioPlayer.numberOfLoops = -1
+        audioPlayer.prepareToPlay()
     }
 
     /**
@@ -285,6 +298,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         // Start game loop.
         startGameLoop()
+        
+        // Start BGM.
+        playBGM()
+    }
+    
+    override func viewWillAppear(animated: Bool)  {
+        audioPlayer.play()
     }
     
 
