@@ -184,8 +184,8 @@
 		5C993C3B195653980093F73B = {
 			isa = PBXGroup;
 			children = (
-				5C993C46195653980093F73B /* TappyBird3D */,
-				5C993C59195653990093F73B /* TappyBird3DTests */,
+				5C993C46195653980093F73B /* TappyFreak3D */,
+				5C993C59195653990093F73B /* TappyFreak3DTests */,
 				5C993C45195653980093F73B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -199,7 +199,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5C993C46195653980093F73B /* TappyBird3D */ = {
+		5C993C46195653980093F73B /* TappyFreak3D */ = {
 			isa = PBXGroup;
 			children = (
 				5C96F707195D108D00054593 /* Frameworks */,
@@ -217,6 +217,7 @@
 				5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */,
 				5CB9CBD9195736A000E468C9 /* TappyBird3D-Bridging-Header.h */,
 			);
+			name = TappyFreak3D;
 			path = TappyBird3D;
 			sourceTree = "<group>";
 		};
@@ -228,12 +229,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		5C993C59195653990093F73B /* TappyBird3DTests */ = {
+		5C993C59195653990093F73B /* TappyFreak3DTests */ = {
 			isa = PBXGroup;
 			children = (
 				5C993C5C195653990093F73B /* TappyBird3DTests.swift */,
 				5C993C5A195653990093F73B /* Supporting Files */,
 			);
+			name = TappyFreak3DTests;
 			path = TappyBird3DTests;
 			sourceTree = "<group>";
 		};
