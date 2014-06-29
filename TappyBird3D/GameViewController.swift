@@ -19,6 +19,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
 
     var gameover  : Bool = false
     var audioPlayer = AVAudioPlayer()
+    var currentBGMURL: NSURL?
     
     let groundNum: Int = 6
     let groundLength: Float = 4.0
@@ -32,6 +33,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         var soundURL: NSURL = NSBundle.mainBundle().URLForResource("flap1", withExtension: "mp3")
         playSound(soundURL)
     }
+    
     /**
      *  Play fail sound.
      */
@@ -50,13 +52,30 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     }
     
     /**
+     *  Play normal BGM.
+     */
+    func playNormalBGM() {
+        var bgmURL = NSBundle.mainBundle().URLForResource("bgm1", withExtension: "mp3")
+        playBGM(bgmURL)
+    }
+    
+    /**
+     *  Play game over BGM.
+     */
+    func playGameoverBGM() {
+        var bgmURL = NSBundle.mainBundle().URLForResource("fail_bgm1", withExtension: "mp3")
+        playBGM(bgmURL)
+    }
+    
+    /**
      *  Play BGM.
      */
-    func playBGM() {
-        var bgmURL = NSBundle.mainBundle().URLForResource("bgm1", withExtension: "mp3")
-        audioPlayer = AVAudioPlayer(contentsOfURL: bgmURL, error: nil)
+    func playBGM(url: NSURL) {
+        stopBGM()
+        audioPlayer = AVAudioPlayer(contentsOfURL: url, error: nil)
         audioPlayer.numberOfLoops = -1
         audioPlayer.prepareToPlay()
+        audioPlayer.play()
     }
 
     func stopBGM() {
@@ -317,13 +336,16 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         startGameLoop()
         
         // Start BGM.
-        playBGM()
+        playNormalBGM()
     }
     
-    override func viewWillAppear(animated: Bool)  {
-        audioPlayer.play()
+    /**
+     *  Do game over.
+     */
+    func doGameover() {
+        playGameoverBGM()
+        playFailSound()
     }
-    
 
     /**
      *  Update the scene.
@@ -337,8 +359,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         gameover = playerBird.presentationNode().position.z != 0
         
         if gameover {
-            stopBGM()
-            playFailSound()
+            doGameover()
 //            LobiRec.stopCapturing()
             
 //            if LobiRec.hasMovie() {
