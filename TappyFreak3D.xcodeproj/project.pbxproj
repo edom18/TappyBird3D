@@ -41,6 +41,7 @@
 		5C993C5D195653990093F73B /* TappyBird3DTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C993C5C195653990093F73B /* TappyBird3DTests.swift */; };
 		5CAE436A1960510A00E98FCE /* fail_bgm1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5CAE43691960510A00E98FCE /* fail_bgm1.mp3 */; };
 		5CB9CBDB195736A100E468C9 /* PhysWorldBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */; };
+		5CF52D8119607D130052EC84 /* FlapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF52D8019607D130052EC84 /* FlapScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +95,7 @@
 		5CB9CBD81957360F00E468C9 /* PhysWorldBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysWorldBridge.h; sourceTree = "<group>"; };
 		5CB9CBD9195736A000E468C9 /* TappyBird3D-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TappyBird3D-Bridging-Header.h"; sourceTree = "<group>"; };
 		5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysWorldBridge.m; sourceTree = "<group>"; };
+		5CF52D8019607D130052EC84 /* FlapScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlapScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +218,7 @@
 				5CB9CBD81957360F00E468C9 /* PhysWorldBridge.h */,
 				5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */,
 				5CB9CBD9195736A000E468C9 /* TappyBird3D-Bridging-Header.h */,
+				5CF52D8019607D130052EC84 /* FlapScene.swift */,
 			);
 			name = TappyFreak3D;
 			path = TappyBird3D;
@@ -381,6 +384,7 @@
 				5CB9CBDB195736A100E468C9 /* PhysWorldBridge.m in Sources */,
 				5C993C4C195653980093F73B /* GameViewController.swift in Sources */,
 				5C993C4A195653980093F73B /* AppDelegate.swift in Sources */,
+				5CF52D8119607D130052EC84 /* FlapScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
