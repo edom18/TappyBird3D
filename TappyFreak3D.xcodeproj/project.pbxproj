@@ -39,6 +39,7 @@
 		5C993C4F195653980093F73B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C993C4D195653980093F73B /* Main.storyboard */; };
 		5C993C51195653980093F73B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C993C50195653980093F73B /* Images.xcassets */; };
 		5C993C5D195653990093F73B /* TappyBird3DTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C993C5C195653990093F73B /* TappyBird3DTests.swift */; };
+		5CAE436A1960510A00E98FCE /* fail_bgm1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5CAE43691960510A00E98FCE /* fail_bgm1.mp3 */; };
 		5CB9CBDB195736A100E468C9 /* PhysWorldBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +90,7 @@
 		5C993C56195653990093F73B /* TappyFreak3DTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TappyFreak3DTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C993C5B195653990093F73B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C993C5C195653990093F73B /* TappyBird3DTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappyBird3DTests.swift; sourceTree = "<group>"; };
+		5CAE43691960510A00E98FCE /* fail_bgm1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = fail_bgm1.mp3; sourceTree = "<group>"; };
 		5CB9CBD81957360F00E468C9 /* PhysWorldBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysWorldBridge.h; sourceTree = "<group>"; };
 		5CB9CBD9195736A000E468C9 /* TappyBird3D-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TappyBird3D-Bridging-Header.h"; sourceTree = "<group>"; };
 		5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysWorldBridge.m; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				5C23D6D219604CDC00A4DF68 /* fail1.mp3 */,
+				5CAE43691960510A00E98FCE /* fail_bgm1.mp3 */,
 				5C143DDD195FB2BE005C04C9 /* flap1.mp3 */,
 				5C143DDF195FB365005C04C9 /* bgm1.mp3 */,
 				5C04E3FD195AC070009762FF /* pipo.wav */,
@@ -355,6 +358,7 @@
 				5C96F6EE195D0F1A00054593 /* LobiCore.bundle in Resources */,
 				5C23D6D11960002B00A4DF68 /* pipe.dae in Resources */,
 				5C05C126195943A200C2A522 /* right.png in Resources */,
+				5CAE436A1960510A00E98FCE /* fail_bgm1.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
