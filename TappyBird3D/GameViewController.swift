@@ -20,7 +20,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var gameover  : Bool = false
     var audioPlayer = AVAudioPlayer()
     
-    let groundNum: Int = 7
+    let groundNum: Int = 6
     let groundLength: Float = 4.0
     
     var frameBuffer: GLint = 0
@@ -29,9 +29,23 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
      *  Play bound sound.
      */
     func playBoundSound() {
-        var soundID: SystemSoundID = 0
         var soundURL: NSURL = NSBundle.mainBundle().URLForResource("flap1", withExtension: "mp3")
-        AudioServicesCreateSystemSoundID(soundURL as CFURLRef, &soundID)
+        playSound(soundURL)
+    }
+    /**
+     *  Play fail sound.
+     */
+    func playFailSound() {
+        var soundURL: NSURL = NSBundle.mainBundle().URLForResource("fail1", withExtension: "mp3")
+        playSound(soundURL)
+    }
+
+    /**
+     *  Play any sound.
+     */
+    func playSound(url: NSURL) {
+        var soundID: SystemSoundID = 0
+        AudioServicesCreateSystemSoundID(url as CFURLRef, &soundID)
         AudioServicesPlaySystemSound(soundID)
     }
     
@@ -40,10 +54,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
      */
     func playBGM() {
         var bgmURL = NSBundle.mainBundle().URLForResource("bgm1", withExtension: "mp3")
-        println(bgmURL)
         audioPlayer = AVAudioPlayer(contentsOfURL: bgmURL, error: nil)
         audioPlayer.numberOfLoops = -1
         audioPlayer.prepareToPlay()
+    }
+
+    func stopBGM() {
+        audioPlayer.stop()
     }
 
     /**
@@ -320,6 +337,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         gameover = playerBird.presentationNode().position.z != 0
         
         if gameover {
+            stopBGM()
+            playFailSound()
 //            LobiRec.stopCapturing()
             
 //            if LobiRec.hasMovie() {
