@@ -42,6 +42,7 @@
 		5CAE436A1960510A00E98FCE /* fail_bgm1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5CAE43691960510A00E98FCE /* fail_bgm1.mp3 */; };
 		5CB9CBDB195736A100E468C9 /* PhysWorldBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */; };
 		5CF52D8119607D130052EC84 /* FlapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF52D8019607D130052EC84 /* FlapScene.swift */; };
+		5CF52D831960DFA90052EC84 /* OpeningScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF52D821960DFA90052EC84 /* OpeningScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		5CB9CBD9195736A000E468C9 /* TappyBird3D-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TappyBird3D-Bridging-Header.h"; sourceTree = "<group>"; };
 		5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysWorldBridge.m; sourceTree = "<group>"; };
 		5CF52D8019607D130052EC84 /* FlapScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlapScene.swift; sourceTree = "<group>"; };
+		5CF52D821960DFA90052EC84 /* OpeningScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpeningScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +221,7 @@
 				5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */,
 				5CB9CBD9195736A000E468C9 /* TappyBird3D-Bridging-Header.h */,
 				5CF52D8019607D130052EC84 /* FlapScene.swift */,
+				5CF52D821960DFA90052EC84 /* OpeningScene.swift */,
 			);
 			name = TappyFreak3D;
 			path = TappyBird3D;
@@ -381,6 +384,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CF52D831960DFA90052EC84 /* OpeningScene.swift in Sources */,
 				5CB9CBDB195736A100E468C9 /* PhysWorldBridge.m in Sources */,
 				5C993C4C195653980093F73B /* GameViewController.swift in Sources */,
 				5C993C4A195653980093F73B /* AppDelegate.swift in Sources */,
