@@ -156,6 +156,15 @@
 			name = images;
 			sourceTree = "<group>";
 		};
+		5C4DEA591966271300FB92C4 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				5CF52D8019607D130052EC84 /* FlapScene.swift */,
+				5CF52D821960DFA90052EC84 /* OpeningScene.swift */,
+			);
+			name = Scenes;
+			sourceTree = "<group>";
+		};
 		5C96F6EA195D0B8500054593 /* LobiSDK */ = {
 			isa = PBXGroup;
 			children = (
@@ -220,8 +229,7 @@
 				5CB9CBD81957360F00E468C9 /* PhysWorldBridge.h */,
 				5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */,
 				5CB9CBD9195736A000E468C9 /* TappyBird3D-Bridging-Header.h */,
-				5CF52D8019607D130052EC84 /* FlapScene.swift */,
-				5CF52D821960DFA90052EC84 /* OpeningScene.swift */,
+				5C4DEA591966271300FB92C4 /* Scenes */,
 			);
 			name = TappyFreak3D;
 			path = TappyBird3D;
