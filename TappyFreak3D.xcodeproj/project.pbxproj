@@ -27,7 +27,6 @@
 		5C96F6F4195D103D00054593 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6F3195D103D00054593 /* libsqlite3.0.dylib */; };
 		5C96F6F6195D104600054593 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6F5195D104600054593 /* QuartzCore.framework */; };
 		5C96F6F8195D104C00054593 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6F7195D104C00054593 /* CoreImage.framework */; };
-		5C96F6FA195D105300054593 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6F9195D105300054593 /* StoreKit.framework */; };
 		5C96F6FC195D105A00054593 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6FB195D105A00054593 /* AVFoundation.framework */; };
 		5C96F6FE195D106000054593 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6FD195D106000054593 /* Foundation.framework */; };
 		5C96F700195D106900054593 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6FF195D106900054593 /* AudioToolbox.framework */; };
@@ -65,6 +64,7 @@
 		5C05C121195943A200C2A522 /* top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = top.png; path = images/top.png; sourceTree = "<group>"; };
 		5C143DDD195FB2BE005C04C9 /* flap1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = flap1.mp3; sourceTree = "<group>"; };
 		5C143DDF195FB365005C04C9 /* bgm1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgm1.mp3; sourceTree = "<group>"; };
+		5C1FA6A1196BA38200081E56 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
 		5C23D6D01960002B00A4DF68 /* pipe.dae */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml.dae; path = pipe.dae; sourceTree = "<group>"; };
 		5C23D6D219604CDC00A4DF68 /* fail1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = fail1.mp3; sourceTree = "<group>"; };
 		5C6CC4B9195C00DF00665EA0 /* bird.dae */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml.dae; path = bird.dae; sourceTree = "<group>"; };
@@ -111,7 +111,6 @@
 				5C96F700195D106900054593 /* AudioToolbox.framework in Frameworks */,
 				5C96F6FE195D106000054593 /* Foundation.framework in Frameworks */,
 				5C96F6FC195D105A00054593 /* AVFoundation.framework in Frameworks */,
-				5C96F6FA195D105300054593 /* StoreKit.framework in Frameworks */,
 				5C96F6F8195D104C00054593 /* CoreImage.framework in Frameworks */,
 				5C96F6F6195D104600054593 /* QuartzCore.framework in Frameworks */,
 				5C96F6F4195D103D00054593 /* libsqlite3.0.dylib in Frameworks */,
@@ -197,6 +196,7 @@
 		5C993C3B195653980093F73B = {
 			isa = PBXGroup;
 			children = (
+				5C1FA6A1196BA38200081E56 /* SceneKit.framework */,
 				5C993C46195653980093F73B /* TappyFreak3D */,
 				5C993C59195653990093F73B /* TappyFreak3DTests */,
 				5C993C45195653980093F73B /* Products */,
@@ -521,6 +521,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = TappyFreak3D;
 				SWIFT_OBJC_BRIDGING_HEADER = "TappyBird3D/TappyBird3D-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -542,6 +543,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = TappyFreak3D;
 				SWIFT_OBJC_BRIDGING_HEADER = "TappyBird3D/TappyBird3D-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";

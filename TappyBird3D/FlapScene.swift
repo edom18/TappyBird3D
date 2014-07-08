@@ -1,17 +1,18 @@
 
 import UIKit
 import QuartzCore
-import SceneKit
 import AudioToolbox
 import OpenGLES
 import AVFoundation
+import SceneKit
+
 
 class FlapScene : SCNScene {
     
     var playerBird: SCNNode!
     var cameraNode: SCNNode!
-    var grounds   : SCNNode[] = SCNNode[]()
-    var walls     : SCNNode[] = SCNNode[]()
+    var grounds   : [SCNNode] = [SCNNode]()
+    var walls     : [SCNNode] = [SCNNode]()
     var currentPos: Float = 0
     var speed     : Float = 0.02
     var view      : SCNView
@@ -27,6 +28,7 @@ class FlapScene : SCNScene {
      */
     init(view: SCNView) {
         self.view = view
+        self.view.allowsCameraControl = true
         
         super.init()
         
@@ -78,16 +80,20 @@ class FlapScene : SCNScene {
      *  Play bound sound.
      */
     func playBoundSound() {
-        var soundURL: NSURL = NSBundle.mainBundle().URLForResource("flap1", withExtension: "mp3")
-        playSound(soundURL)
+        struct sound {
+            static let url: NSURL = NSBundle.mainBundle().URLForResource("flap1", withExtension: "mp3")
+        }
+        playSound(sound.url)
     }
     
     /**
      *  Play fail sound.
      */
     func playFailSound() {
-        var soundURL: NSURL = NSBundle.mainBundle().URLForResource("fail1", withExtension: "mp3")
-        playSound(soundURL)
+        struct sound {
+            static let url: NSURL = NSBundle.mainBundle().URLForResource("fail1", withExtension: "mp3")
+        }
+        playSound(sound.url)
     }
 
     /**
@@ -126,6 +132,9 @@ class FlapScene : SCNScene {
         audioPlayer.play()
     }
 
+    /**
+     *  Stop BGM.
+     */
     func stopBGM() {
         audioPlayer.stop()
     }
@@ -164,27 +173,31 @@ class FlapScene : SCNScene {
      *  Create walls as up and down.
      */
     func createWall() -> (SCNNode, SCNNode) {
-        let wallHeight: CGFloat = 10.0
-        let interval = CGFloat(1.2)
-        let wallUp   = SCNNode()
-        let wallDown = SCNNode()
+        let wallHeight: CGFloat = 7.0
+        let interval: CGFloat   = 1.5
+        let url         = NSBundle.mainBundle().URLForResource("pipe", withExtension: "dae")
+        let sceneSource = SCNSceneSource(URL: url, options: nil)
+        let wallUp   = sceneSource.entryWithIdentifier("pipe_top", withClass: SCNNode.self) as SCNNode
+        let wallDown = wallUp.clone() as SCNNode
         
-        let material = SCNMaterial()
-        material.diffuse.contents = UIColor(red: 0.03, green: 0.59, blue: 0.25, alpha: 1)
-
-        material.specular.contents = UIColor.grayColor()
-        material.locksAmbientWithDiffuse = true
+//        let material = SCNMaterial()
+//        material.diffuse.contents = UIColor(red: 0.03, green: 0.59, blue: 0.25, alpha: 1)
+//
+//        material.specular.contents = UIColor.grayColor()
+//        material.locksAmbientWithDiffuse = true
         
         let wallGeo   = SCNCylinder(radius: 0.8, height: wallHeight)
-        let wallShape = SCNPhysicsShape(geometry: wallGeo, options: nil)
-        wallGeo.firstMaterial = material
-        wallDown.geometry    = wallGeo
-        wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
+//        let wallShape = SCNPhysicsShape(geometry: wallGeo, options: nil)
+        let wallShape = SCNPhysicsShape(node: wallDown, options: nil)
+//        wallGeo.firstMaterial = material
+//        wallDown.geometry    = wallGeo
+        wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Kinematic, shape: wallShape)
         let posYDown         = CFloat(-wallHeight / 2.0 - interval / 2.0 + 1.0)
         wallDown.position    = SCNVector3(x: 0, y: posYDown, z: 0)
+        wallDown.rotation    = SCNVector4(x: 1, y: 0, z: 0, w: CFloat(M_PI / 2))
         
-        wallUp.geometry    = wallGeo
-        wallUp.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
+//        wallUp.geometry    = wallGeo
+        wallUp.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Kinematic, shape: wallShape)
         let posYUp         = CFloat(wallHeight / 2.0 + interval / 2.0 + 1.0)
         wallUp.position    = SCNVector3(x: 0, y: posYUp, z: 0)
         
@@ -196,7 +209,7 @@ class FlapScene : SCNScene {
      *  Set up walls.
      */
     func setupWalls() {
-        for i in 0..groundNum {
+        for i in 0...groundNum {
             let (wallUp, wallDown) = createWall()
             let z = -CFloat(Float(i + 1) * groundLength)
             let delta: CFloat = CFloat(arc4random_uniform(UInt32(10))) / 10
@@ -217,24 +230,7 @@ class FlapScene : SCNScene {
     func setupField() {
         let width:  CGFloat = 20.0
         let height: CGFloat = 0.5
-        
         let groundGeo  = SCNBox(width: width, height: height, length: CGFloat(groundLength), chamferRadius: 0)
-//        let material = SCNMaterial()
-//        material.diffuse.contents  = UIImage(named: "ground")
-//        material.diffuse.wrapT     = SCNWrapMode.Repeat
-//        material.diffuse.wrapS     = SCNWrapMode.Repeat
-//        material.specular.contents = UIColor.grayColor()
-//        material.locksAmbientWithDiffuse = true
-        
-//        for i in 0..groundNum {
-//            let groundNode = SCNNode()
-//            groundNode.geometry = groundGeo
-//            groundNode.position = SCNVector3(x: 0, y: -1.0, z: -CFloat(Float(i) * groundLength))
-//            scene.rootNode.addChildNode(groundNode)
-//            
-//            groundNode.geometry.firstMaterial = material
-//            grounds.append(groundNode)
-//        }
         
         // for hit test ground.
         let groundNode = SCNNode()
@@ -252,7 +248,7 @@ class FlapScene : SCNScene {
         let floorMaterial = SCNMaterial()
         floorMaterial.diffuse.contents = UIColor.grayColor()
         floor.firstMaterial = floorMaterial
-        floor.reflectivity = 0.1
+        floor.reflectivity = 0.0
         floorNode.geometry = floor
         floorNode.position = SCNVector3(x: 0, y: -0.9, z: 0)
         rootNode.addChildNode(floorNode)
@@ -330,20 +326,6 @@ class FlapScene : SCNScene {
         currentPos += speed
         
         let limitPos: Float = 4.0
-        
-//        for (i, g) in enumerate(grounds) {
-//            var pos: SCNVector3 = g.position
-//            pos.z += speed
-//            
-//            if pos.z > limitPos {
-//                pos.z -= Float(groundNum) * groundLength
-//                g.position = pos
-//            }
-//            else {
-//                g.position = pos
-//            }
-//        }
-        
         for var i = 0, l = walls.count; i < l; i += 2 {
             let w1 = walls[i + 0]
             let w2 = walls[i + 1]
