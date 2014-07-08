@@ -178,6 +178,7 @@
 		5C96F707195D108D00054593 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5C1FA6A1196BA38200081E56 /* SceneKit.framework */,
 				5C96F705195D108600054593 /* OpenGLES.framework */,
 				5C96F703195D107B00054593 /* UIKit.framework */,
 				5C96F701195D107100054593 /* AssetsLibrary.framework */,
@@ -196,7 +197,6 @@
 		5C993C3B195653980093F73B = {
 			isa = PBXGroup;
 			children = (
-				5C1FA6A1196BA38200081E56 /* SceneKit.framework */,
 				5C993C46195653980093F73B /* TappyFreak3D */,
 				5C993C59195653990093F73B /* TappyFreak3DTests */,
 				5C993C45195653980093F73B /* Products */,
