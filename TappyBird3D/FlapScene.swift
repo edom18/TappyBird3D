@@ -6,8 +6,11 @@ import OpenGLES
 import AVFoundation
 import SceneKit
 
+let groundCategory: Int = 0x1 << 0
+let playerCategory: Int = 0x1 << 1
+let pipeCategory: Int   = 0x1 << 2
 
-class FlapScene : SCNScene {
+class FlapScene : SCNScene, SCNPhysicsContactDelegate {
     
     var playerBird: SCNNode!
     var cameraNode: SCNNode!
@@ -28,7 +31,7 @@ class FlapScene : SCNScene {
      */
     init(view: SCNView) {
         self.view = view
-        self.view.allowsCameraControl = true
+//        self.view.allowsCameraControl = true
         
         super.init()
         
@@ -166,6 +169,9 @@ class FlapScene : SCNScene {
         
         let playerBirdShape = SCNPhysicsShape(node: playerBird, options: nil)
         playerBird.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: playerBirdShape)
+        playerBird.physicsBody.categoryBitMask  = playerCategory
+        playerBird.physicsBody.collisionBitMask = 0//pipeCategory | groundCategory
+        println(pipeCategory | groundCategory)
     }
     
     
@@ -192,12 +198,16 @@ class FlapScene : SCNScene {
 //        wallGeo.firstMaterial = material
 //        wallDown.geometry    = wallGeo
         wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Kinematic, shape: wallShape)
+        wallDown.physicsBody.categoryBitMask  = pipeCategory
+        wallDown.physicsBody.collisionBitMask = playerCategory
         let posYDown         = CFloat(-wallHeight / 2.0 - interval / 2.0 + 1.0)
         wallDown.position    = SCNVector3(x: 0, y: posYDown, z: 0)
         wallDown.rotation    = SCNVector4(x: 1, y: 0, z: 0, w: CFloat(M_PI / 2))
         
 //        wallUp.geometry    = wallGeo
         wallUp.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Kinematic, shape: wallShape)
+        wallUp.physicsBody.categoryBitMask  = pipeCategory
+        wallUp.physicsBody.collisionBitMask = playerCategory
         let posYUp         = CFloat(wallHeight / 2.0 + interval / 2.0 + 1.0)
         wallUp.position    = SCNVector3(x: 0, y: posYUp, z: 0)
         
@@ -236,19 +246,21 @@ class FlapScene : SCNScene {
         let groundNode = SCNNode()
         groundNode.geometry = groundGeo
         groundNode.position = SCNVector3(x: 0, y: -1.0, z: 0)
-        groundNode.opacity = 0
+        groundNode.opacity  = 0
         rootNode.addChildNode(groundNode)
         
         let groundShape = SCNPhysicsShape(geometry: groundGeo, options: nil)
         groundNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: groundShape)
+        groundNode.physicsBody.categoryBitMask  = groundCategory
+        groundNode.physicsBody.collisionBitMask = 0//playerCategory
         
         // create a floor.
-        let floorNode = SCNNode()
-        let floor = SCNFloor()
+        let floorNode     = SCNNode()
+        let floor         = SCNFloor()
         let floorMaterial = SCNMaterial()
         floorMaterial.diffuse.contents = UIColor.grayColor()
         floor.firstMaterial = floorMaterial
-        floor.reflectivity = 0.0
+        floor.reflectivity  = 0.0
         floorNode.geometry = floor
         floorNode.position = SCNVector3(x: 0, y: -0.9, z: 0)
         rootNode.addChildNode(floorNode)
@@ -273,9 +285,11 @@ class FlapScene : SCNScene {
         rootNode.addChildNode(ambientLightNode)
         
         // configure a physics world.
-        let bridge = PhysWorldBridge()
-        // bridge.physicsDelegate(scene)
-        bridge.physicsGravity(self, withGravity: SCNVector3(x: 0, y: -2.98, z: 0))
+        self.physicsWorld.gravity = SCNVector3(x: 0, y: -2.98, z: 0)
+        self.physicsWorld.contactDelegate = self
+//        let bridge = PhysWorldBridge()
+//        // bridge.physicsDelegate(scene)
+//        bridge.physicsGravity(self, withGravity: SCNVector3(x: 0, y: -2.98, z: 0))
     }
     
     
@@ -297,6 +311,11 @@ class FlapScene : SCNScene {
         playGameoverBGM()
         playFailSound()
     }
+    
+    func checkGameover() -> Bool {
+        gameover =  playerBird.presentationNode().position.z != 0
+        return gameover
+    }
 
     /**
      *  Update the scene.
@@ -306,8 +325,6 @@ class FlapScene : SCNScene {
         if gameover {
             return
         }
-
-        gameover = playerBird.presentationNode().position.z != 0
         
         if gameover {
             doGameover()
@@ -321,6 +338,7 @@ class FlapScene : SCNScene {
 //                    prepareHandler: nil,
 //                    afterHandler: nil)
 //            }
+            return
         }
         
         currentPos += speed
@@ -370,5 +388,9 @@ class FlapScene : SCNScene {
         gestureRecognizers.addObject(tapGesture)
         gestureRecognizers.addObjectsFromArray(view.gestureRecognizers)
         view.gestureRecognizers = gestureRecognizers
+    }
+    
+    func physicsWorld(world: SCNPhysicsWorld!, didBeginContact contact: SCNPhysicsContact!) {
+        println(contact)
     }
 }

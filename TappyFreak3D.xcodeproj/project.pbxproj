@@ -38,6 +38,40 @@
 		5C993C4F195653980093F73B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C993C4D195653980093F73B /* Main.storyboard */; };
 		5C993C51195653980093F73B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C993C50195653980093F73B /* Images.xcassets */; };
 		5C993C5D195653990093F73B /* TappyBird3DTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C993C5C195653990093F73B /* TappyBird3DTests.swift */; };
+		5CA837E1196F5D1F005FD913 /* OpeningScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF52D821960DFA90052EC84 /* OpeningScene.swift */; };
+		5CA837E2196F5D1F005FD913 /* PhysWorldBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */; };
+		5CA837E3196F5D1F005FD913 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C993C4B195653980093F73B /* GameViewController.swift */; };
+		5CA837E4196F5D1F005FD913 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C993C49195653980093F73B /* AppDelegate.swift */; };
+		5CA837E5196F5D1F005FD913 /* FlapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF52D8019607D130052EC84 /* FlapScene.swift */; };
+		5CA837E7196F5D1F005FD913 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F705195D108600054593 /* OpenGLES.framework */; };
+		5CA837E8196F5D1F005FD913 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F703195D107B00054593 /* UIKit.framework */; };
+		5CA837E9196F5D1F005FD913 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F701195D107100054593 /* AssetsLibrary.framework */; };
+		5CA837EA196F5D1F005FD913 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6FF195D106900054593 /* AudioToolbox.framework */; };
+		5CA837EB196F5D1F005FD913 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6FD195D106000054593 /* Foundation.framework */; };
+		5CA837EC196F5D1F005FD913 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6FB195D105A00054593 /* AVFoundation.framework */; };
+		5CA837ED196F5D1F005FD913 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6F7195D104C00054593 /* CoreImage.framework */; };
+		5CA837EE196F5D1F005FD913 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6F5195D104600054593 /* QuartzCore.framework */; };
+		5CA837EF196F5D1F005FD913 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6F3195D103D00054593 /* libsqlite3.0.dylib */; };
+		5CA837F0196F5D1F005FD913 /* LobiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6EB195D0F1A00054593 /* LobiCore.framework */; };
+		5CA837F1196F5D1F005FD913 /* LobiRec.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C96F6EF195D100600054593 /* LobiRec.framework */; };
+		5CA837F3196F5D1F005FD913 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C993C4D195653980093F73B /* Main.storyboard */; };
+		5CA837F4196F5D1F005FD913 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C993C50195653980093F73B /* Images.xcassets */; };
+		5CA837F5196F5D1F005FD913 /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C05C11F195943A200C2A522 /* left.png */; };
+		5CA837F6196F5D1F005FD913 /* bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C05C11D195943A200C2A522 /* bottom.png */; };
+		5CA837F7196F5D1F005FD913 /* ground.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C74E232195B25CA0087DABE /* ground.png */; };
+		5CA837F8196F5D1F005FD913 /* flap1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5C143DDD195FB2BE005C04C9 /* flap1.mp3 */; };
+		5CA837F9196F5D1F005FD913 /* front.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C05C11E195943A200C2A522 /* front.png */; };
+		5CA837FA196F5D1F005FD913 /* top.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C05C121195943A200C2A522 /* top.png */; };
+		5CA837FB196F5D1F005FD913 /* LobiRec.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5C96F6F0195D100600054593 /* LobiRec.bundle */; };
+		5CA837FC196F5D1F005FD913 /* pipo.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5C04E3FD195AC070009762FF /* pipo.wav */; };
+		5CA837FD196F5D1F005FD913 /* fail1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5C23D6D219604CDC00A4DF68 /* fail1.mp3 */; };
+		5CA837FE196F5D1F005FD913 /* bird.dae in Resources */ = {isa = PBXBuildFile; fileRef = 5C6CC4B9195C00DF00665EA0 /* bird.dae */; };
+		5CA837FF196F5D1F005FD913 /* bgm1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5C143DDF195FB365005C04C9 /* bgm1.mp3 */; };
+		5CA83800196F5D1F005FD913 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C05C11C195943A200C2A522 /* back.png */; };
+		5CA83801196F5D1F005FD913 /* LobiCore.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5C96F6EC195D0F1A00054593 /* LobiCore.bundle */; };
+		5CA83802196F5D1F005FD913 /* pipe.dae in Resources */ = {isa = PBXBuildFile; fileRef = 5C23D6D01960002B00A4DF68 /* pipe.dae */; };
+		5CA83803196F5D1F005FD913 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C05C120195943A200C2A522 /* right.png */; };
+		5CA83804196F5D1F005FD913 /* fail_bgm1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5CAE43691960510A00E98FCE /* fail_bgm1.mp3 */; };
 		5CAE436A1960510A00E98FCE /* fail_bgm1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5CAE43691960510A00E98FCE /* fail_bgm1.mp3 */; };
 		5CB9CBDB195736A100E468C9 /* PhysWorldBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB9CBDA195736A100E468C9 /* PhysWorldBridge.m */; };
 		5CF52D8119607D130052EC84 /* FlapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF52D8019607D130052EC84 /* FlapScene.swift */; };
@@ -92,6 +126,8 @@
 		5C993C56195653990093F73B /* TappyFreak3DTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TappyFreak3DTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C993C5B195653990093F73B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C993C5C195653990093F73B /* TappyBird3DTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappyBird3DTests.swift; sourceTree = "<group>"; };
+		5CA83808196F5D1F005FD913 /* TappyFreak3D-simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TappyFreak3D-simulator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CA83809196F5D20005FD913 /* TappyFreak3D-simulator-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "TappyFreak3D-simulator-Info.plist"; path = "/Users/edo/xcode-projects/TappyBird3D/TappyFreak3D-simulator-Info.plist"; sourceTree = "<absolute>"; };
 		5CAE43691960510A00E98FCE /* fail_bgm1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = fail_bgm1.mp3; sourceTree = "<group>"; };
 		5CB9CBD81957360F00E468C9 /* PhysWorldBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysWorldBridge.h; sourceTree = "<group>"; };
 		5CB9CBD9195736A000E468C9 /* TappyBird3D-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TappyBird3D-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -123,6 +159,24 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CA837E6196F5D1F005FD913 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CA837E7196F5D1F005FD913 /* OpenGLES.framework in Frameworks */,
+				5CA837E8196F5D1F005FD913 /* UIKit.framework in Frameworks */,
+				5CA837E9196F5D1F005FD913 /* AssetsLibrary.framework in Frameworks */,
+				5CA837EA196F5D1F005FD913 /* AudioToolbox.framework in Frameworks */,
+				5CA837EB196F5D1F005FD913 /* Foundation.framework in Frameworks */,
+				5CA837EC196F5D1F005FD913 /* AVFoundation.framework in Frameworks */,
+				5CA837ED196F5D1F005FD913 /* CoreImage.framework in Frameworks */,
+				5CA837EE196F5D1F005FD913 /* QuartzCore.framework in Frameworks */,
+				5CA837EF196F5D1F005FD913 /* libsqlite3.0.dylib in Frameworks */,
+				5CA837F0196F5D1F005FD913 /* LobiCore.framework in Frameworks */,
+				5CA837F1196F5D1F005FD913 /* LobiRec.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,6 +254,7 @@
 				5C993C46195653980093F73B /* TappyFreak3D */,
 				5C993C59195653990093F73B /* TappyFreak3DTests */,
 				5C993C45195653980093F73B /* Products */,
+				5CA83809196F5D20005FD913 /* TappyFreak3D-simulator-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -208,6 +263,7 @@
 			children = (
 				5C993C44195653980093F73B /* TappyFreak3D.app */,
 				5C993C56195653990093F73B /* TappyFreak3DTests.xctest */,
+				5CA83808196F5D1F005FD913 /* TappyFreak3D-simulator.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -315,6 +371,23 @@
 			productReference = 5C993C56195653990093F73B /* TappyFreak3DTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		5CA837DF196F5D1F005FD913 /* TappyFreak3D-simulator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5CA83805196F5D1F005FD913 /* Build configuration list for PBXNativeTarget "TappyFreak3D-simulator" */;
+			buildPhases = (
+				5CA837E0196F5D1F005FD913 /* Sources */,
+				5CA837E6196F5D1F005FD913 /* Frameworks */,
+				5CA837F2196F5D1F005FD913 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TappyFreak3D-simulator";
+			productName = TappyBird3D;
+			productReference = 5CA83808196F5D1F005FD913 /* TappyFreak3D-simulator.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -348,6 +421,7 @@
 			targets = (
 				5C993C43195653980093F73B /* TappyFreak3D */,
 				5C993C55195653990093F73B /* TappyFreak3DTests */,
+				5CA837DF196F5D1F005FD913 /* TappyFreak3D-simulator */,
 			);
 		};
 /* End PBXProject section */
@@ -385,6 +459,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5CA837F2196F5D1F005FD913 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CA837F3196F5D1F005FD913 /* Main.storyboard in Resources */,
+				5CA837F4196F5D1F005FD913 /* Images.xcassets in Resources */,
+				5CA837F5196F5D1F005FD913 /* left.png in Resources */,
+				5CA837F6196F5D1F005FD913 /* bottom.png in Resources */,
+				5CA837F7196F5D1F005FD913 /* ground.png in Resources */,
+				5CA837F8196F5D1F005FD913 /* flap1.mp3 in Resources */,
+				5CA837F9196F5D1F005FD913 /* front.png in Resources */,
+				5CA837FA196F5D1F005FD913 /* top.png in Resources */,
+				5CA837FB196F5D1F005FD913 /* LobiRec.bundle in Resources */,
+				5CA837FC196F5D1F005FD913 /* pipo.wav in Resources */,
+				5CA837FD196F5D1F005FD913 /* fail1.mp3 in Resources */,
+				5CA837FE196F5D1F005FD913 /* bird.dae in Resources */,
+				5CA837FF196F5D1F005FD913 /* bgm1.mp3 in Resources */,
+				5CA83800196F5D1F005FD913 /* back.png in Resources */,
+				5CA83801196F5D1F005FD913 /* LobiCore.bundle in Resources */,
+				5CA83802196F5D1F005FD913 /* pipe.dae in Resources */,
+				5CA83803196F5D1F005FD913 /* right.png in Resources */,
+				5CA83804196F5D1F005FD913 /* fail_bgm1.mp3 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -405,6 +504,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C993C5D195653990093F73B /* TappyBird3DTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CA837E0196F5D1F005FD913 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CA837E1196F5D1F005FD913 /* OpeningScene.swift in Sources */,
+				5CA837E2196F5D1F005FD913 /* PhysWorldBridge.m in Sources */,
+				5CA837E3196F5D1F005FD913 /* GameViewController.swift in Sources */,
+				5CA837E4196F5D1F005FD913 /* AppDelegate.swift in Sources */,
+				5CA837E5196F5D1F005FD913 /* FlapScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,7 +632,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				OTHER_SWIFT_FLAGS = "";
+				OTHER_SWIFT_FLAGS = "-target-cpu cyclone";
 				PRODUCT_NAME = TappyFreak3D;
 				SWIFT_OBJC_BRIDGING_HEADER = "TappyBird3D/TappyBird3D-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -543,7 +654,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				OTHER_SWIFT_FLAGS = "";
+				OTHER_SWIFT_FLAGS = "-target-cpu cyclone";
 				PRODUCT_NAME = TappyFreak3D;
 				SWIFT_OBJC_BRIDGING_HEADER = "TappyBird3D/TappyBird3D-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -586,6 +697,49 @@
 			};
 			name = Release;
 		};
+		5CA83806196F5D1F005FD913 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/TappyBird3D",
+				);
+				INFOPLIST_FILE = "TappyFreak3D-simulator-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
+				OTHER_SWIFT_FLAGS = "";
+				PRODUCT_NAME = "TappyFreak3D-simulator";
+				SWIFT_OBJC_BRIDGING_HEADER = "TappyBird3D/TappyBird3D-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5CA83807196F5D1F005FD913 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/TappyBird3D",
+				);
+				INFOPLIST_FILE = "TappyFreak3D-simulator-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
+				OTHER_SWIFT_FLAGS = "";
+				PRODUCT_NAME = "TappyFreak3D-simulator";
+				SWIFT_OBJC_BRIDGING_HEADER = "TappyBird3D/TappyBird3D-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -612,6 +766,15 @@
 			buildConfigurations = (
 				5C993C64195653990093F73B /* Debug */,
 				5C993C65195653990093F73B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CA83805196F5D1F005FD913 /* Build configuration list for PBXNativeTarget "TappyFreak3D-simulator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CA83806196F5D1F005FD913 /* Debug */,
+				5CA83807196F5D1F005FD913 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
