@@ -65,7 +65,7 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
         setupEnv()
         
         // Set up field.
-        setupField()
+        // setupField()
         
         // Set up walls
         setupWalls()
@@ -324,9 +324,24 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
      *  Do game over.
      */
     func doGameover() {
+        
+        if gameover {
+            return
+        }
+        
         gameover = true
         playGameoverBGM()
         playFailSound()
+        
+        let delay = 10.5 * Double(NSEC_PER_SEC)
+        let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(time, dispatch_get_main_queue(), {
+            for gesture in self.view.gestureRecognizers {
+                self.view.removeGestureRecognizer(gesture as UIGestureRecognizer)
+            }
+            self.stopBGM()
+            self.view.scene = OpeningScene(view: self.view)
+        });
     }
     
     func checkGameover() -> Bool {
