@@ -6,9 +6,9 @@ import OpenGLES
 import AVFoundation
 import SceneKit
 
-let groundCategory: Int = 0x1 << 0
-let playerCategory: Int = 0x1 << 1
-let pipeCategory: Int   = 0x1 << 2
+let groundCategory: Int = 1 << 2
+let playerCategory: Int = 1 << 3
+let pipeCategory: Int   = 1 << 4
 
 class FlapScene : SCNScene, SCNPhysicsContactDelegate {
     
@@ -17,7 +17,7 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
     var grounds   : [SCNNode] = [SCNNode]()
     var walls     : [SCNNode] = [SCNNode]()
     var currentPos: Float = 0
-    var speed     : Float = 0.02
+    var speed     : Float = -2.0
     var view      : SCNView
 
     var gameover  : Bool = false
@@ -25,13 +25,14 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
     
     let groundNum: Int = 6
     let groundLength: Float = 4.0
+    let cameraPos: SCNVector3 = SCNVector3(x: 2.5, y: 1.5, z: 3.5)
 
     /**
      *  Initializer
      */
     init(view: SCNView) {
         self.view = view
-//        self.view.allowsCameraControl = true
+        // self.view.allowsCameraControl = true
         
         super.init()
         
@@ -53,7 +54,7 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
         // create and add a camera to the scene
         cameraNode = SCNNode()
         cameraNode.camera   = SCNCamera()
-        cameraNode.position = SCNVector3(x: 2.5, y: 1.5, z: 3.5)
+        cameraNode.position = cameraPos
         cameraNode.rotation = SCNVector4(x: 0, y: 1.0, z: 0, w: 0.40)
         rootNode.addChildNode(cameraNode)
         
@@ -153,7 +154,7 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
         playerBird = SCNNode()
         playerBird.position.y = 1.5
         
-        let nodeNames  = sceneSource.identifiersOfEntriesWithClass(SCNNode.self)
+        let nodeNames = sceneSource.identifiersOfEntriesWithClass(SCNNode.self)
         let body   = sceneSource.entryWithIdentifier("body",   withClass: SCNNode.self) as SCNNode
         let wing_L = sceneSource.entryWithIdentifier("wing_L", withClass: SCNNode.self) as SCNNode
         let wing_R = sceneSource.entryWithIdentifier("wing_R", withClass: SCNNode.self) as SCNNode
@@ -162,16 +163,16 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
         playerBird.addChildNode(wing_R)
         
         // println(sceneSource.identifiersOfEntriesWithClass(CAAnimation.self))
-        let bodyAnim    = sceneSource.entryWithIdentifier("body_location_X",   withClass: CAAnimation.self) as CAAnimation
+        let bodyAnim = sceneSource.entryWithIdentifier("body_location_X", withClass: CAAnimation.self) as CAAnimation
         playerBird.addAnimation(bodyAnim, forKey: "flap")
         
         rootNode.addChildNode(playerBird)
         
-        let playerBirdShape = SCNPhysicsShape(node: playerBird, options: nil)
+        let playerBirdGeo      = SCNSphere(radius: 0.2)
+        let playerBirdShape    = SCNPhysicsShape(geometry: playerBirdGeo, options: nil)
         playerBird.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Dynamic, shape: playerBirdShape)
-        playerBird.physicsBody.categoryBitMask  = playerCategory
-        playerBird.physicsBody.collisionBitMask = 0//pipeCategory | groundCategory
-        println(pipeCategory | groundCategory)
+        // playerBird.physicsBody.categoryBitMask  = playerCategory
+        // playerBird.physicsBody.collisionBitMask = pipeCategory | groundCategory
     }
     
     
@@ -181,35 +182,53 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
     func createWall() -> (SCNNode, SCNNode) {
         let wallHeight: CGFloat = 7.0
         let interval: CGFloat   = 1.5
-        let url         = NSBundle.mainBundle().URLForResource("pipe", withExtension: "dae")
-        let sceneSource = SCNSceneSource(URL: url, options: nil)
-        let wallUp   = sceneSource.entryWithIdentifier("pipe_top", withClass: SCNNode.self) as SCNNode
-        let wallDown = wallUp.clone() as SCNNode
+        let posYDown = CFloat(-wallHeight / 2.0 - interval / 2.0 + 1.0)
+        let posYUp   = CFloat( wallHeight / 2.0 + interval / 2.0 + 1.0)
         
-//        let material = SCNMaterial()
-//        material.diffuse.contents = UIColor(red: 0.03, green: 0.59, blue: 0.25, alpha: 1)
-//
-//        material.specular.contents = UIColor.grayColor()
-//        material.locksAmbientWithDiffuse = true
+        var wallUp   = SCNNode()
+        var wallDown = SCNNode()
         
-        let wallGeo   = SCNCylinder(radius: 0.8, height: wallHeight)
-//        let wallShape = SCNPhysicsShape(geometry: wallGeo, options: nil)
-        let wallShape = SCNPhysicsShape(node: wallDown, options: nil)
-//        wallGeo.firstMaterial = material
-//        wallDown.geometry    = wallGeo
-        wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Kinematic, shape: wallShape)
-        wallDown.physicsBody.categoryBitMask  = pipeCategory
-        wallDown.physicsBody.collisionBitMask = playerCategory
-        let posYDown         = CFloat(-wallHeight / 2.0 - interval / 2.0 + 1.0)
-        wallDown.position    = SCNVector3(x: 0, y: posYDown, z: 0)
-        wallDown.rotation    = SCNVector4(x: 1, y: 0, z: 0, w: CFloat(M_PI / 2))
-        
-//        wallUp.geometry    = wallGeo
-        wallUp.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Kinematic, shape: wallShape)
-        wallUp.physicsBody.categoryBitMask  = pipeCategory
-        wallUp.physicsBody.collisionBitMask = playerCategory
-        let posYUp         = CFloat(wallHeight / 2.0 + interval / 2.0 + 1.0)
-        wallUp.position    = SCNVector3(x: 0, y: posYUp, z: 0)
+        // a bit heavy to use a model.
+        var useModel = false
+        if useModel {
+            let url         = NSBundle.mainBundle().URLForResource("pipe", withExtension: "dae")
+            let sceneSource = SCNSceneSource(URL: url, options: nil)
+            wallUp   = sceneSource.entryWithIdentifier("pipe_top", withClass: SCNNode.self) as SCNNode
+            wallDown = wallUp.clone() as SCNNode
+            
+            let wallShape = SCNPhysicsShape(node: wallDown, options: nil)
+            wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
+            // wallDown.physicsBody.categoryBitMask  = pipeCategory
+            // wallDown.physicsBody.collisionBitMask = playerCategory
+            wallDown.position    = SCNVector3(x: 0, y: posYDown, z: 0)
+            wallDown.rotation    = SCNVector4(x: 1, y: 0, z: 0, w: CFloat(M_PI / 2))
+            
+            wallUp.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
+            // wallUp.physicsBody.categoryBitMask  = pipeCategory
+            // wallUp.physicsBody.collisionBitMask = playerCategory
+            wallUp.position = SCNVector3(x: 0, y: posYUp, z: 0)
+        }
+        else {
+            let material = SCNMaterial()
+            material.diffuse.contents  = UIColor(red: 0.03, green: 0.59, blue: 0.25, alpha: 1)
+            material.specular.contents = UIColor.grayColor()
+            material.locksAmbientWithDiffuse = true
+            
+            let wallGeo   = SCNCylinder(radius: 0.8, height: wallHeight)
+            let wallShape = SCNPhysicsShape(geometry: wallGeo, options: nil)
+            wallGeo.firstMaterial = material
+            wallDown.geometry    = wallGeo
+            wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
+            // wallDown.physicsBody.categoryBitMask  = pipeCategory
+            // wallDown.physicsBody.collisionBitMask = playerCategory
+            wallDown.position    = SCNVector3(x: 0, y: posYDown, z: 0)
+            
+            wallUp.geometry    = wallGeo
+            wallUp.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
+            // wallUp.physicsBody.categoryBitMask  = pipeCategory
+            // wallUp.physicsBody.collisionBitMask = playerCategory
+            wallUp.position = SCNVector3(x: 0, y: posYUp, z: 0)
+        }
         
         return (wallUp, wallDown)
     }
@@ -240,7 +259,7 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
     func setupField() {
         let width:  CGFloat = 20.0
         let height: CGFloat = 0.5
-        let groundGeo  = SCNBox(width: width, height: height, length: CGFloat(groundLength), chamferRadius: 0)
+        let groundGeo = SCNBox(width: width, height: height, length: CGFloat(groundLength), chamferRadius: 0)
         
         // for hit test ground.
         let groundNode = SCNNode()
@@ -252,7 +271,7 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
         let groundShape = SCNPhysicsShape(geometry: groundGeo, options: nil)
         groundNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: groundShape)
         groundNode.physicsBody.categoryBitMask  = groundCategory
-        groundNode.physicsBody.collisionBitMask = 0//playerCategory
+        // groundNode.physicsBody.collisionBitMask = playerCategory
         
         // create a floor.
         let floorNode     = SCNNode()
@@ -287,9 +306,6 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
         // configure a physics world.
         self.physicsWorld.gravity = SCNVector3(x: 0, y: -2.98, z: 0)
         self.physicsWorld.contactDelegate = self
-//        let bridge = PhysWorldBridge()
-//        // bridge.physicsDelegate(scene)
-//        bridge.physicsGravity(self, withGravity: SCNVector3(x: 0, y: -2.98, z: 0))
     }
     
     
@@ -308,13 +324,14 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
      *  Do game over.
      */
     func doGameover() {
+        gameover = true
         playGameoverBGM()
         playFailSound()
     }
     
     func checkGameover() -> Bool {
-        gameover =  playerBird.presentationNode().position.z != 0
-        return gameover
+        return (playerBird.presentationNode().position.y <= 0 ||
+                playerBird.presentationNode().position.y >= 4)
     }
 
     /**
@@ -326,41 +343,29 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
             return
         }
         
-        if gameover {
+        
+        
+        if checkGameover() {
             doGameover()
-//            LobiRec.stopCapturing()
+            // LobiRec.stopCapturing()
             
-//            if LobiRec.hasMovie() {
-//                LobiRec.presentLobiPostWithTitle("title",
-//                    postDescrition: "description",
-//                    postScore: 30,
-//                    postCategory: "category",
-//                    prepareHandler: nil,
-//                    afterHandler: nil)
-//            }
+            // if LobiRec.hasMovie() {
+            //     LobiRec.presentLobiPostWithTitle("title",
+            //         postDescrition: "description",
+            //         postScore: 30,
+            //         postCategory: "category",
+            //         prepareHandler: nil,
+            //         afterHandler: nil)
+            // }
             return
         }
         
-        currentPos += speed
-        
-        let limitPos: Float = 4.0
-        for var i = 0, l = walls.count; i < l; i += 2 {
-            let w1 = walls[i + 0]
-            let w2 = walls[i + 1]
-            
-            var pos: SCNVector3 = w1.position
-            pos.z += speed
-            
-            if pos.z > limitPos {
-                pos.z -= Float(groundNum) * groundLength
-                w1.position = pos
-                w2.position.z = pos.z
-            }
-            else {
-                w1.position = pos
-                w2.position.z = pos.z
-            }
-        }
+        var pos = playerBird.presentationNode().position
+        pos.x += cameraPos.x
+        pos.y  = cameraPos.y
+        pos.z += cameraPos.z
+        playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: 0, z: speed), impulse: false)
+        cameraNode.position = pos
     }
     
     /**
@@ -390,7 +395,9 @@ class FlapScene : SCNScene, SCNPhysicsContactDelegate {
         view.gestureRecognizers = gestureRecognizers
     }
     
+    // MARK: - SCNPhysicsContactDelegate
+    
     func physicsWorld(world: SCNPhysicsWorld!, didBeginContact contact: SCNPhysicsContact!) {
-        println(contact)
+        doGameover()
     }
 }
