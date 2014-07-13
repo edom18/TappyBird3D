@@ -14,6 +14,7 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
     
     var playerBird: SCNNode!
     var cameraNode: SCNNode!
+    var rightCamera: SCNNode!
     var grounds   : [SCNNode] = [SCNNode]()
     var walls     : [SCNNode] = [SCNNode]()
     var currentPos: Float = 0
@@ -56,6 +57,13 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
             UIImage(named: "back")
         ]
         
+        // Create a right camera.
+        rightCamera = SCNNode()
+        rightCamera.camera = SCNCamera()
+        rightCamera.position = SCNVector3(x: -2.5, y: 1.5, z: 3.5)
+        rightCamera.rotation = SCNVector4(x: 0, y: 1.0, z: 0, w: -0.40)
+        rootNode.addChildNode(rightCamera)
+        
         // create and add a camera to the scene
         cameraNode = SCNNode()
         cameraNode.camera   = SCNCamera()
@@ -65,7 +73,7 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         
         // Create a player.
         createPlayer()
-//        createClouds()
+        // createClouds()
         
         // Set up environment.
         setupEnv()
@@ -79,11 +87,10 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         // Set up tap handler.
         setupHandleTap()
         
-        // Start game loop.
-        // startGameLoop()
-        
         // Start BGM.
         playNormalBGM()
+        
+        view.pointOfView = rightCamera
     }
     
     /**
@@ -338,33 +345,21 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
     func setupEnv() {
         // create and add a light to the scene
         let lightOmniNode = SCNNode()
-        lightOmniNode.position = SCNVector3(x: 0, y: 10, z: 10)
-        lightOmniNode.light = SCNLight()
+        lightOmniNode.position   = SCNVector3(x: 0, y: 10, z: 10)
+        lightOmniNode.light      = SCNLight()
         lightOmniNode.light.type = SCNLightTypeOmni
         rootNode.addChildNode(lightOmniNode)
         
         // create and add an ambient light to the scene
         let ambientLightNode = SCNNode()
-        ambientLightNode.light = SCNLight()
+        ambientLightNode.light       = SCNLight()
         ambientLightNode.light.type  = SCNLightTypeAmbient
         ambientLightNode.light.color = UIColor.darkGrayColor()
         rootNode.addChildNode(ambientLightNode)
         
         // configure a physics world.
         self.physicsWorld.gravity = SCNVector3(x: 0, y: -2.98, z: 0)
-//        self.physicsWorld.gravity = SCNVector3(x: 0, y: 0, z: 0)
         self.physicsWorld.contactDelegate = self
-    }
-    
-    
-    /**
-     *  Start game loop.
-     *
-     *  Game logic updating is in `update:` method.
-     */
-    func startGameLoop() {
-        var displayLink: CADisplayLink = CADisplayLink(target: self, selector: "update:")
-        displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
     }
     
     
