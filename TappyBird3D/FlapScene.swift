@@ -18,7 +18,7 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
     var walls     : [SCNNode] = [SCNNode]()
     var currentPos: Float = 0
     var currentPipe: Int = 0
-    var limitInterval: Float = 5
+    var limitInterval: Float = 5.5
     var speed     : Float = -1.00
 //    var speed     : Float = -0.1
     var view      : SCNView
@@ -190,7 +190,7 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
      */
 //    func createWall() -> (SCNNode, SCNNode) {
     func createWall() -> SCNNode {
-        let wallHeight: CGFloat = 7.0
+        let wallHeight: CGFloat = 20.0
         let interval: CGFloat   = 1.5
         let posYDown = CFloat(-wallHeight / 2.0 - interval / 2.0 + 1.0)
         let posYUp   = CFloat( wallHeight / 2.0 + interval / 2.0 + 1.0)
@@ -201,7 +201,7 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         
         // a bit heavy to use a model.
         var useModel = false
-        if !useModel {
+        if useModel {
             let url         = NSBundle.mainBundle().URLForResource("pipe", withExtension: "dae")
             let sceneSource = SCNSceneSource(URL: url, options: nil)
             wallUp   = sceneSource.entryWithIdentifier("pipe_top", withClass: SCNNode.self) as SCNNode
@@ -221,21 +221,30 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         }
         else {
             let material = SCNMaterial()
-            material.diffuse.contents  = UIColor(red: 0.03, green: 0.59, blue: 0.25, alpha: 1)
+            // material.diffuse.contents  = UIColor(red: 0.03, green: 0.59, blue: 0.25, alpha: 1)
+            material.diffuse.contents  = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
             material.specular.contents = UIColor.grayColor()
+            material.reflective.contents = [
+                UIImage(named: "right"),
+                UIImage(named: "left"),
+                UIImage(named: "top"),
+                UIImage(named: "bottom"),
+                UIImage(named: "front"),
+                UIImage(named: "back")
+            ]
             material.locksAmbientWithDiffuse = true
             
             let wallGeo   = SCNCylinder(radius: 0.8, height: wallHeight)
             let wallShape = SCNPhysicsShape(geometry: wallGeo, options: nil)
             wallGeo.firstMaterial = material
             wallDown.geometry    = wallGeo
-            wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
+            wallDown.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Kinematic, shape: wallShape)
             // wallDown.physicsBody.categoryBitMask  = pipeCategory
             // wallDown.physicsBody.collisionBitMask = playerCategory
             wallDown.position    = SCNVector3(x: 0, y: posYDown, z: 0)
             
             wallUp.geometry    = wallGeo
-            wallUp.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: wallShape)
+            wallUp.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Kinematic, shape: wallShape)
             // wallUp.physicsBody.categoryBitMask  = pipeCategory
             // wallUp.physicsBody.collisionBitMask = playerCategory
             wallUp.position = SCNVector3(x: 0, y: posYUp, z: 0)
@@ -245,7 +254,6 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         wall.addChildNode(wallDown)
         
         return wall
-//        return (wallUp, wallDown)
     }
     
     
@@ -254,7 +262,6 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
      */
     func setupWalls() {
         for i in 0...(groundNum - 1) {
-//            let (wallUp, wallDown) = createWall()
             let wall = createWall()
             let z = -CFloat(Float(i + 1) * groundLength)
             let delta: CFloat = CFloat(arc4random_uniform(UInt32(10))) / 10
@@ -262,15 +269,6 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
             wall.position.y += delta
             rootNode.addChildNode(wall)
             walls += wall
-            
-//            wallUp.position.z    = z
-//            wallUp.position.y   += delta
-//            wallDown.position.z  = z
-//            wallDown.position.y += delta
-//            rootNode.addChildNode(wallUp)
-//            rootNode.addChildNode(wallDown)
-//            walls += wallUp
-//            walls += wallDown
         }
     }
     
@@ -281,7 +279,7 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
     func swapWall() {
         // pickup 2 walls.
         let tmp = walls[0]
-        let pipePos = groundNum + currentPipe + 1
+        let pipePos = groundNum + currentPipe
         let z: CFloat = -CFloat(Float(pipePos) * groundLength)
         let delta: CFloat = CFloat(arc4random_uniform(UInt32(10))) / 10
         tmp.position.z  = z
@@ -290,24 +288,6 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         walls[0...(walls.count - 2)] = walls[1...(walls.count - 1)]
         walls[walls.count - 1] = tmp
     }
-    
-//    func swapWall() {
-//        // pickup 2 walls.
-//        let tmp = walls[0...1]
-//        let start = walls.count - 3
-//        let end   = walls.count - 1
-//        
-//        let pipePos = groundNum + currentPipe + 1
-//        let z: CFloat = -CFloat(Float(pipePos) * groundLength)
-//        let delta: CFloat = CFloat(arc4random_uniform(UInt32(10))) / 10
-//        tmp[0].position.z  = z
-//        tmp[0].position.y += delta
-//        tmp[1].position.z  = z
-//        tmp[1].position.y += delta
-//        
-//        walls[0...1] = walls[start...end]
-//        walls[start...end] = tmp[0...1]
-//    }
     
     func createClouds() {
         let particleSystem = SCNParticleSystem()
