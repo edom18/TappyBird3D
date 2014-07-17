@@ -14,14 +14,13 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
     
     var playerBird: SCNNode!
     var cameraNode: SCNNode!
-    var rightCamera: SCNNode!
     var grounds   : [SCNNode] = [SCNNode]()
     var walls     : [SCNNode] = [SCNNode]()
     var currentPos: Float = 0
     var currentPipe: Int = 0
     var limitInterval: Float = 5.5
     var speed     : Float = -1.00
-//    var speed     : Float = -0.1
+    // var speed     : Float = -0.1
     var view      : SCNView
 
     var gameover  : Bool = false
@@ -30,14 +29,14 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
     let groundNum: Int = 6
     let groundLength: Float = 4.0
     let cameraPos: SCNVector3 = SCNVector3(x: 2.5, y: 1.5, z: 3.5)
-//    let cameraPos: SCNVector3 = SCNVector3(x: 12.5, y: 1.5, z: 13.5)
+    // let cameraPos: SCNVector3 = SCNVector3(x: 12.5, y: 1.5, z: 13.5)
 
     /**
      *  Initializer
      */
     init(view: SCNView) {
         self.view = view
-//        self.view.allowsCameraControl = true
+        // self.view.allowsCameraControl = true
         
         super.init()
         self.view.delegate = self
@@ -57,13 +56,6 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
             UIImage(named: "back")
         ]
         
-        // Create a right camera.
-        rightCamera = SCNNode()
-        rightCamera.camera = SCNCamera()
-        rightCamera.position = SCNVector3(x: -2.5, y: 1.5, z: 3.5)
-        rightCamera.rotation = SCNVector4(x: 0, y: 1.0, z: 0, w: -0.40)
-        rootNode.addChildNode(rightCamera)
-        
         // create and add a camera to the scene
         cameraNode = SCNNode()
         cameraNode.camera   = SCNCamera()
@@ -73,7 +65,6 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         
         // Create a player.
         createPlayer()
-        // createClouds()
         
         // Set up environment.
         setupEnv()
@@ -90,7 +81,7 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         // Start BGM.
         playNormalBGM()
         
-        view.pointOfView = rightCamera
+        // view.pointOfView = cameraNode
     }
     
     /**
@@ -163,9 +154,8 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         
         println("--------------- Create a player bird. -----------------")
         
-        let fileName: String = "bird"
-        let url: NSURL = NSBundle.mainBundle().URLForResource(fileName, withExtension: "dae")
-        let sceneSource: SCNSceneSource = SCNSceneSource(URL: url, options: nil)
+        let url = NSBundle.mainBundle().URLForResource("bird", withExtension: "dae")
+        let sceneSource = SCNSceneSource(URL: url, options: nil)
         
         playerBird = SCNNode()
         playerBird.position.y = 1.5
@@ -195,7 +185,6 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
     /**
      *  Create walls as up and down.
      */
-//    func createWall() -> (SCNNode, SCNNode) {
     func createWall() -> SCNNode {
         let wallHeight: CGFloat = 20.0
         let interval: CGFloat   = 1.5
@@ -296,16 +285,6 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         walls[walls.count - 1] = tmp
     }
     
-    func createClouds() {
-        let particleSystem = SCNParticleSystem()
-        particleSystem.emissionDuration = 3.0
-        particleSystem.blendMode = SCNParticleBlendMode.Additive
-        particleSystem.particleColor = UIColor.redColor()
-        particleSystem.particleImage = UIImage(named: "cloud.png")
-        particleSystem.local = false
-        particleSystem.emitterShape = SCNSphere(radius: 0.5)
-        playerBird.addParticleSystem(particleSystem)
-    }
     
     /**
      *  Set up field.
