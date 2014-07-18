@@ -39,6 +39,9 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         // self.view.allowsCameraControl = true
         
         super.init()
+        
+        LobiRec.setCurrentContext(self.view.eaglContext, withGLView: self.view)
+        
         self.view.delegate = self
         
         // create a new scene
@@ -341,18 +344,22 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         self.playGameoverBGM()
         self.playFailSound()
         
-        // LobiRec.stopCapturing()
-        // 
-        // if LobiRec.hasMovie() {
-        //     LobiRec.presentLobiPostWithTitle(
-        //         "title",
-        //         postDescrition: "description",
-        //         postScore     : Int64(self.currentPipe),
-        //         postCategory  : "category",
-        //         prepareHandler: nil,
-        //         afterHandler  : nil
-        //     )
-        // }
+        LobiRec.stopCapturing()
+        
+        if LobiRec.hasMovie() {
+            let delay = 2 * Double(NSEC_PER_SEC)
+            let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+            dispatch_after(time, dispatch_get_main_queue(), {
+                LobiRec.presentLobiPostWithTitle(
+                    "title",
+                    postDescrition: "description",
+                    postScore     : Int64(self.currentPipe),
+                    postCategory  : "category",
+                    prepareHandler: nil,
+                    afterHandler  : nil
+                )
+            })
+        }
         
         // let delay = 10.5 * Double(NSEC_PER_SEC)
         // let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
@@ -444,18 +451,18 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         self.update();
     }
     
-    // func renderer(aRenderer: SCNSceneRenderer!, willRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
-    //     if (self.frameBuffer == 0) {
-    //         println("---------------- set up framebuffer ---------------------")
-    //         glGetIntegerv(GLenum(GL_FRAMEBUFFER_BINDING), &self.frameBuffer)
-    //         LobiRec.createFramebuffer(GLuint(self.frameBuffer))
-    //         LobiRec.startCapturing()
-    //     }
-    //     LobiRec.prepareFrame()
-    // }
-    // 
-    // func renderer(aRenderer: SCNSceneRenderer!, didRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
-    //     LobiRec.appendFrame(GLuint(self.frameBuffer))
-    // }
+    func renderer(aRenderer: SCNSceneRenderer!, willRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
+        if (self.frameBuffer == 0) {
+            println("---------------- set up framebuffer ---------------------")
+            glGetIntegerv(GLenum(GL_FRAMEBUFFER_BINDING), &self.frameBuffer)
+            LobiRec.createFramebuffer(GLuint(self.frameBuffer))
+            LobiRec.startCapturing()
+        }
+        LobiRec.prepareFrame()
+    }
+    
+    func renderer(aRenderer: SCNSceneRenderer!, didRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
+        LobiRec.appendFrame(GLuint(self.frameBuffer))
+    }
     
 }
