@@ -28,6 +28,8 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
     let groundNum: Int = 6
     let groundLength: Float = 4.0
     let cameraPos: SCNVector3 = SCNVector3(x: 2.5, y: 1.5, z: 3.5)
+    
+    var frameBuffer: GLint = 0
 
     /**
      *  Initializer
@@ -339,6 +341,19 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         self.playGameoverBGM()
         self.playFailSound()
         
+        // LobiRec.stopCapturing()
+        // 
+        // if LobiRec.hasMovie() {
+        //     LobiRec.presentLobiPostWithTitle(
+        //         "title",
+        //         postDescrition: "description",
+        //         postScore     : Int64(self.currentPipe),
+        //         postCategory  : "category",
+        //         prepareHandler: nil,
+        //         afterHandler  : nil
+        //     )
+        // }
+        
         // let delay = 10.5 * Double(NSEC_PER_SEC)
         // let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
         // dispatch_after(time, dispatch_get_main_queue(), {
@@ -366,18 +381,6 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         
         if self.checkGameover() {
             self.doGameover()
-            // LobiRec.stopCapturing()
-            // 
-            // if LobiRec.hasMovie() {
-            //     LobiRec.presentLobiPostWithTitle(
-            //         "title",
-            //         postDescrition: "description",
-            //         postScore     : 30,
-            //         postCategory  : "category",
-            //         prepareHandler: nil,
-            //         afterHandler  : nil
-            //     )
-            // }
             return
         }
         
@@ -427,14 +430,32 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         self.view.gestureRecognizers = gestureRecognizers
     }
     
-    // MARK: - SCNPhysicsContactDelegate
     
+    ////////////////////////////////////////////////////////////////
+    // MARK: - SCNPhysicsContactDelegate
     func physicsWorld(world: SCNPhysicsWorld!, didBeginContact contact: SCNPhysicsContact!) {
         self.doGameover()
     }
     
+    
+    ////////////////////////////////////////////////////////////////
     // MARK: - SCNSceneRendererDelegate
     func renderer(aRenderer: SCNSceneRenderer!, updateAtTime time: NSTimeInterval) {
         self.update();
     }
+    
+    // func renderer(aRenderer: SCNSceneRenderer!, willRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
+    //     if (self.frameBuffer == 0) {
+    //         println("---------------- set up framebuffer ---------------------")
+    //         glGetIntegerv(GLenum(GL_FRAMEBUFFER_BINDING), &self.frameBuffer)
+    //         LobiRec.createFramebuffer(GLuint(self.frameBuffer))
+    //         LobiRec.startCapturing()
+    //     }
+    //     LobiRec.prepareFrame()
+    // }
+    // 
+    // func renderer(aRenderer: SCNSceneRenderer!, didRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
+    //     LobiRec.appendFrame(GLuint(self.frameBuffer))
+    // }
+    
 }

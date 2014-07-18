@@ -3,13 +3,11 @@ import UIKit
 import QuartzCore
 import SceneKit
 import AudioToolbox
-import OpenGLES
 import AVFoundation
 
 class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysicsContactDelegate {
     
     var scene     : SCNScene!
-    var frameBuffer: GLint = 0
     
     /**
      *  Configure a view.
@@ -49,19 +47,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         // Configure a view.
         configureView()
     }
-    
-//    func renderer(aRenderer: SCNSceneRenderer!, willRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
-//        if (frameBuffer == 0) {
-//            glGetIntegerv(GLenum(GL_FRAMEBUFFER_BINDING), &frameBuffer)
-//            LobiRec.createFramebuffer(GLuint(frameBuffer))
-//            LobiRec.startCapturing()
-//        }
-//        LobiRec.prepareFrame()
-//    }
-//    
-//    func renderer(aRenderer: SCNSceneRenderer!, didRenderScene scene: SCNScene!, atTime time: NSTimeInterval) {
-//        LobiRec.appendFrame(GLuint(frameBuffer))
-//    }
     
     override func shouldAutorotate() -> Bool {
         return true
