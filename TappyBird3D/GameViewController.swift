@@ -44,7 +44,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        scene = FlapScene(view: self.view as SCNView)
         scene = OpeningScene(view: self.view as SCNView)
         
         // Configure a view.

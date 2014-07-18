@@ -20,7 +20,6 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
     var currentPipe: Int = 0
     var limitInterval: Float = 5.5
     var speed     : Float = -1.00
-    // var speed     : Float = -0.1
     var view      : SCNView
 
     var gameover  : Bool = false
@@ -29,7 +28,6 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
     let groundNum: Int = 6
     let groundLength: Float = 4.0
     let cameraPos: SCNVector3 = SCNVector3(x: 2.5, y: 1.5, z: 3.5)
-    // let cameraPos: SCNVector3 = SCNVector3(x: 12.5, y: 1.5, z: 13.5)
 
     /**
      *  Initializer
@@ -290,31 +288,17 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
      *  Set up field.
      */
     func setupField() {
-        let width:  CGFloat = 20.0
-        let height: CGFloat = 0.5
-        let groundGeo = SCNBox(width: width, height: height, length: CGFloat(groundLength), chamferRadius: 0)
-        
-        // for hit test ground.
-        let groundNode = SCNNode()
-        groundNode.geometry = groundGeo
-        groundNode.position = SCNVector3(x: 0, y: -1.0, z: 0)
-        groundNode.opacity  = 0
-        rootNode.addChildNode(groundNode)
-        
-        let groundShape = SCNPhysicsShape(geometry: groundGeo, options: nil)
-        groundNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: groundShape)
-        groundNode.physicsBody.categoryBitMask  = groundCategory
-        // groundNode.physicsBody.collisionBitMask = playerCategory
-        
         // create a floor.
         let floorNode     = SCNNode()
         let floor         = SCNFloor()
         let floorMaterial = SCNMaterial()
         floorMaterial.diffuse.contents = UIColor.grayColor()
-        floor.firstMaterial = floorMaterial
-        floor.reflectivity  = 0.0
-        floorNode.geometry = floor
-        floorNode.position = SCNVector3(x: 0, y: -0.9, z: 0)
+        floor.firstMaterial   = floorMaterial
+        floor.reflectivity    = 0.0
+        floorNode.geometry    = floor
+        let floorPysicsShape  = SCNPhysicsShape(geometry: floor, options: nil)
+        floorNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Static, shape: floorPysicsShape)
+        floorNode.position    = SCNVector3(x: 0, y: -0.9, z: 0)
         rootNode.addChildNode(floorNode)
     }
     
@@ -347,23 +331,23 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
      */
     func doGameover() {
         
-        if gameover {
+        if self.gameover {
             return
         }
         
-        gameover = true
-        playGameoverBGM()
-        playFailSound()
+        self.gameover = true
+        self.playGameoverBGM()
+        self.playFailSound()
         
-        let delay = 10.5 * Double(NSEC_PER_SEC)
-        let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-        dispatch_after(time, dispatch_get_main_queue(), {
-            for gesture in self.view.gestureRecognizers {
-                self.view.removeGestureRecognizer(gesture as UIGestureRecognizer)
-            }
-            self.stopBGM()
-            self.view.scene = OpeningScene(view: self.view)
-        });
+        // let delay = 10.5 * Double(NSEC_PER_SEC)
+        // let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        // dispatch_after(time, dispatch_get_main_queue(), {
+        //     for gesture in self.view.gestureRecognizers {
+        //         self.view.removeGestureRecognizer(gesture as UIGestureRecognizer)
+        //     }
+        //     self.stopBGM()
+        //     self.view.scene = OpeningScene(view: self.view)
+        // });
     }
     
     func checkGameover() -> Bool {
@@ -374,44 +358,45 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
     /**
      *  Update the scene.
      */
-//    func update(displayLink: CADisplayLink) {
     func update() {
         
-        if gameover {
+        if self.gameover {
             return
         }
         
-        if checkGameover() {
-            doGameover()
+        if self.checkGameover() {
+            self.doGameover()
             // LobiRec.stopCapturing()
-            
+            // 
             // if LobiRec.hasMovie() {
-            //     LobiRec.presentLobiPostWithTitle("title",
+            //     LobiRec.presentLobiPostWithTitle(
+            //         "title",
             //         postDescrition: "description",
-            //         postScore: 30,
-            //         postCategory: "category",
+            //         postScore     : 30,
+            //         postCategory  : "category",
             //         prepareHandler: nil,
-            //         afterHandler: nil)
+            //         afterHandler  : nil
+            //     )
             // }
             return
         }
         
-        var pos = playerBird.presentationNode().position
-        playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: 0, z: speed), impulse: false)
-        currentPos = pos.z
-        pos.x += cameraPos.x
-        pos.y  = cameraPos.y
-        pos.z += cameraPos.z
-        cameraNode.position = pos
+        var pos = self.playerBird.presentationNode().position
+        self.playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: 0, z: self.speed), impulse: false)
+        self.currentPos = pos.z
+        pos.x += self.cameraPos.x
+        pos.y  = self.cameraPos.y
+        pos.z += self.cameraPos.z
+        self.cameraNode.position = pos
         
-        let now = Int(-currentPos / limitInterval)
-//        println("currentPos: \(currentPos)")
-//        println("now: \(now)")
-//        println(currentPipe)
-        if now > currentPipe {
-            currentPipe = now
-            println("-------- need to swap walls. currentPipe is \(currentPipe) --------")
-            swapWall()
+        let now = Int(-self.currentPos / self.limitInterval)
+        // println("currentPos: \(currentPos)")
+        // println("now: \(now)")
+        // println(currentPipe)
+        if now > self.currentPipe {
+            self.currentPipe = now
+            println("-------- need to swap walls. currentPipe is \(self.currentPipe) --------")
+            self.swapWall()
         }
     }
     
@@ -422,13 +407,13 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
      */
     func handleTap(gestureRecognize: UIGestureRecognizer) {
         
-        if gameover {
+        if self.gameover {
             return
         }
         
         let power: Float = 1.8
-        playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: power, z: 0), impulse: true)
-        playBoundSound()
+        self.playerBird.physicsBody.applyForce(SCNVector3(x: 0, y: power, z: 0), impulse: true)
+        self.playBoundSound()
     }
     
     /**
@@ -438,18 +423,18 @@ class FlapScene : SCNScene, SCNSceneRendererDelegate, SCNPhysicsContactDelegate 
         let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
         let gestureRecognizers = NSMutableArray()
         gestureRecognizers.addObject(tapGesture)
-        gestureRecognizers.addObjectsFromArray(view.gestureRecognizers)
-        view.gestureRecognizers = gestureRecognizers
+        gestureRecognizers.addObjectsFromArray(self.view.gestureRecognizers)
+        self.view.gestureRecognizers = gestureRecognizers
     }
     
     // MARK: - SCNPhysicsContactDelegate
     
     func physicsWorld(world: SCNPhysicsWorld!, didBeginContact contact: SCNPhysicsContact!) {
-        doGameover()
+        self.doGameover()
     }
     
     // MARK: - SCNSceneRendererDelegate
     func renderer(aRenderer: SCNSceneRenderer!, updateAtTime time: NSTimeInterval) {
-        update();
+        self.update();
     }
 }
